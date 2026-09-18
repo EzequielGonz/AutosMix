@@ -74,8 +74,7 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="font-semibold">Horarios</p>
-                  <p className="mt-0.5 text-sm text-white/55">Lunes a viernes 9 a 18 hs</p>
-                  <p className="text-sm text-white/55">Sábados 9 a 13 hs</p>
+                  <p className="mt-0.5 text-sm text-white/55">Lunes a sábados · 9 a 13 hs y 16 a 18 hs</p>
                 </div>
               </div>
             </Reveal>
@@ -103,18 +102,17 @@ export function Footer() {
           <div>
             <img src="/autosmix-logo.png" alt="AutosMix" className="h-12 w-auto" width={150} height={48} />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
-              Iluminación LED, accesorios y seguridad vehicular. Tienda oficial en MercadoLibre con
-              envíos a todo el país.
+              Iluminación LED, accesorios y seguridad vehicular. Envíos a todo el país por Andreani.
             </p>
             <div className="mt-5 flex flex-wrap gap-3 text-xs text-white/50">
               <span className="inline-flex items-center gap-1.5">
-                <Truck className="size-4 text-brand" /> Envío gratis
+                <Truck className="size-4 text-brand" /> Envíos por Andreani
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="size-4 text-brand" /> Compra protegida
+                <ShieldCheck className="size-4 text-brand" /> Garantía real
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CreditCard className="size-4 text-brand" /> Hasta 6 cuotas
+                <CreditCard className="size-4 text-brand" /> 10% OFF por transferencia
               </span>
             </div>
           </div>
@@ -136,14 +134,14 @@ export function Footer() {
             </ul>
           </nav>
 
-          {/* Vende con nosotros */}
+          {/* MercadoLibre: opción segura */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40">
-              Vendé con nosotros
+              ¿Preferís MercadoLibre?
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-white/45">
-              Todo nuestro catálogo también está en MercadoLibre con envío gratis y compra
-              protegida.
+              Todo nuestro catálogo también está disponible en nuestra tienda de MercadoLibre,
+              con compra protegida para quien prefiera ese canal.
             </p>
             <a
               href={STORE.mercadolibre}
@@ -151,7 +149,7 @@ export function Footer() {
               rel="noreferrer"
               className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#fff01f] px-5 py-3 text-sm font-bold text-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,240,31,0.3)]"
             >
-              Ver tienda oficial
+              Comprar en MercadoLibre
             </a>
             <p className="mt-6 text-sm text-white/60">
               <span className="font-semibold text-white">AutosMix</span>

@@ -1,15 +1,14 @@
 'use client'
 
-import { BadgeCheck, MapPin, PackageCheck, Users } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { BRANDS } from '@/lib/products'
 import { Reveal } from '@/components/reveal'
 
-const STATS = [
-  { icon: Users, value: '+970', label: 'Seguidores en MercadoLibre' },
-  { icon: PackageCheck, value: '+500', label: 'Ventas concretadas' },
-  { icon: BadgeCheck, value: '4.8★', label: 'Reputación dorada' },
-  { icon: MapPin, value: 'MDP', label: 'Bordabehere 3111' },
-]
+const GOOGLE = {
+  rating: '4.8',
+  stars: 5,
+  url: 'https://www.google.com/maps/search/?api=1&query=AutosMix+Bordabehere+3111+Mar+del+Plata',
+}
 
 export function Brands() {
   const marquee = [...BRANDS, ...BRANDS]
@@ -58,9 +57,9 @@ export function Brands() {
               </h2>
               <p className="mt-4 leading-relaxed text-white/55">
                 En <strong className="text-white">AutosMix</strong> nos especializamos en iluminación
-                vehicular y accesorios. Elegimos cada producto probándolo en el taller, porque
-                también somos usuarios. Vendemos en MercadoLibre con reputación dorada y despachamos
-                a todo el país todos los días.
+                vehicular y accesorios.                Elegimos cada producto probándolo en el taller, porque
+                también somos usuarios. Despachamos a todo el país todos los días y también
+                podés encontrarnos en MercadoLibre.
               </p>
               <p className="mt-3 leading-relaxed text-white/55">
                 ¿Estás en Mar del Plata? Vení a vernos a{' '}
@@ -75,17 +74,36 @@ export function Brands() {
               </a>
             </Reveal>
 
-            <div className="grid grid-cols-2 gap-4">
-              {STATS.map((s, i) => (
-                <Reveal key={s.label} delay={i * 90}>
-                  <div className="group flex flex-col items-center gap-1 rounded-3xl border border-line bg-ink p-8 text-center transition-all duration-500 hover:-translate-y-1 hover:border-brand/50 hover:shadow-[0_15px_40px_rgba(225,6,0,0.2)]">
-                    <s.icon className="size-6 text-brand transition-transform duration-500 group-hover:scale-125" />
-                    <span className="mt-2 font-display text-3xl text-white">{s.value}</span>
-                    <span className="text-xs text-white/45">{s.label}</span>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+            <Reveal delay={150}>
+              <a
+                href={GOOGLE.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-3 rounded-3xl border border-line bg-ink p-8 text-center transition-all duration-500 hover:-translate-y-1 hover:border-brand/50 hover:shadow-[0_15px_40px_rgba(225,6,0,0.2)] sm:p-10"
+              >
+                {/* Logo de Google (multi color) */}
+                <svg viewBox="0 0 48 48" className="size-10" aria-hidden>
+                  <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.2-.1-2.3-.4-3.5z"/>
+                  <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+                  <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.6 39.6 16.3 44 24 44z"/>
+                  <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C36.9 39.2 44 34 44 24c0-1.2-.1-2.3-.4-3.5z"/>
+                </svg>
+                <div className="flex items-end gap-2">
+                  <span className="font-display text-5xl text-white">{GOOGLE.rating}</span>
+                  <Star className="mb-1 size-6 fill-amber-400 text-amber-400 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-125" />
+                </div>
+                <div className="flex gap-0.5" aria-label="5 estrellas">
+                  {Array.from({ length: GOOGLE.stars }).map((_, i) => (
+                    <Star key={i} className="size-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-white/55">Calificación en Google Business</p>
+                <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand transition-all duration-300 group-hover:gap-3">
+                  Ver reseñas
+                  <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 17L17 7M17 7H8m9 0v9" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </span>
+              </a>
+            </Reveal>
           </div>
         </div>
       </section>

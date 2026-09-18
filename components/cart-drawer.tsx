@@ -1,12 +1,10 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Minus, Plus, ShoppingCart, Trash2, X, Zap, ExternalLink } from 'lucide-react'
+import { Minus, Plus, ShoppingCart, Trash2, X, Zap, ExternalLink, Truck, CreditCard } from 'lucide-react'
 import { formatPrice, STORE } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { cn } from '@/lib/utils'
-
-const FREE_SHIPPING_MIN = 35000
 
 export function CartDrawer() {
   const { items, isCartOpen, closeCart, remove, setQty, total, count, clear } = useStore()
@@ -23,15 +21,12 @@ export function CartDrawer() {
     }
   }, [isCartOpen, closeCart])
 
-  const missing = Math.max(0, FREE_SHIPPING_MIN - total)
-  const progress = Math.min(100, (total / FREE_SHIPPING_MIN) * 100)
-
   const whatsappMessage = () => {
     const lines = items.map(
       (i) => `• ${i.qty}x ${i.product.name} — ${formatPrice(i.qty * i.product.price)}`,
     )
     return encodeURIComponent(
-      `¡Hola AutosMix! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\nTotal: ${formatPrice(total)}\n\nMi nombre: `,
+      `¡Hola AutosMix! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\nTotal: ${formatPrice(total)}\nEnvío por Andreani a coordinar.\n\nMi nombre: `,
     )
   }
 
@@ -72,33 +67,6 @@ export function CartDrawer() {
             <X className="size-4" />
           </button>
         </div>
-
-        {/* Barra envío gratis */}
-        {items.length > 0 && (
-          <div className="border-b border-line px-5 py-3">
-            <p className="text-xs text-white/60">
-              {missing > 0 ? (
-                <>
-                  Te faltan <span className="font-bold text-brand">{formatPrice(missing)}</span> para
-                  envío gratis 🚚
-                </>
-              ) : (
-                <span className="font-semibold text-emerald-400">
-                  ¡Tenés envío gratis en este pedido! 🎉
-                </span>
-              )}
-            </p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div
-                className={cn(
-                  'h-full rounded-full transition-all duration-700',
-                  missing > 0 ? 'bg-gradient-to-r from-brand-700 to-brand' : 'bg-emerald-500',
-                )}
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-        )}
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-5 py-4">
@@ -198,12 +166,17 @@ export function CartDrawer() {
               <span className="text-white/60">Subtotal</span>
               <span className="font-semibold">{formatPrice(total)}</span>
             </div>
-            <div className="mt-1 flex items-center justify-between">
-              <span className="text-white/60">Envío</span>
-              <span className={missing > 0 ? 'text-white/60' : 'font-semibold text-emerald-400'}>
-                {missing > 0 ? 'A calcular' : 'GRATIS'}
+            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-white/45">
+              <CreditCard className="size-3.5 shrink-0 text-emerald-400" />
+              <span>
+                <span className="font-semibold text-emerald-400">10% OFF</span> pagando por
+                transferencia
               </span>
-            </div>
+            </p>
+            <p className="mt-1 flex items-center gap-1.5 text-xs text-white/45">
+              <Truck className="size-3.5 shrink-0 text-brand" />
+              <span>Envío a todo el país por Andreani · se coordina al confirmar</span>
+            </p>
             <div className="mt-2 flex items-center justify-between border-t border-line pt-3">
               <span className="font-display uppercase">Total</span>
               <span className="font-display text-2xl text-brand">{formatPrice(total)}</span>

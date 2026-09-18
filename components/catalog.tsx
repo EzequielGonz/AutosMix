@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowUpDown, LayoutGrid, Lightbulb, Package, SearchX, Shield, Sparkles, Wrench } from 'lucide-react'
-import { CATEGORIES, PRODUCTS, type Category } from '@/lib/products'
+import { ArrowUpDown, LayoutGrid, Lightbulb, Package, SearchX, Shield, Sparkles } from 'lucide-react'
+import { CATEGORIES, PRODUCTS, SUBCATEGORIES, type Category, type Subcategory } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { ProductCard } from '@/components/product-card'
 import { Reveal } from '@/components/reveal'
@@ -16,7 +16,6 @@ const CATEGORY_ICONS: Record<string, typeof LayoutGrid> = {
   package: Package,
   shield: Shield,
   sparkles: Sparkles,
-  wrench: Wrench,
 }
 
 type Sort = 'relevancia' | 'menor-precio' | 'mayor-precio' | 'rating'
@@ -29,20 +28,39 @@ const SORT_LABELS: Record<Sort, string> = {
 }
 
 export function Catalog() {
-  const { search, setSearch, category, setCategory } = useStore()
+  const { search, setSearch, category, setCategory, subcategory, setSubcategory } = useStore()
   const [sort, setSort] = useState<Sort>('relevancia')
   const [visible, setVisible] = useState(PAGE_SIZE)
+
+  // Subcategorías disponibles para la categoría activa
+  const availableSubs = useMemo(
+    () =>
+      category === 'todos'
+        ? []
+        : SUBCATEGORIES.filter((s) => s.category === category),
+    [category],
+  )
+
+  // Si cambia la categoría y la subcategoría activa ya no corresponde, resetear
+  useEffect(() => {
+    if (subcategory && !availableSubs.some((s) => s.id === subcategory)) {
+      setSubcategory(null)
+    }
+  }, [category, subcategory, availableSubs, setSubcategory])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     let list = PRODUCTS.filter((p) => {
       const okCat = category === 'todos' || p.category === (category as Category)
+      const okSub = !subcategory || p.subcategory === subcategory
+      const subLabel = SUBCATEGORIES.find((s) => s.id === p.subcategory)?.label ?? ''
       const okSearch =
         !q ||
         p.name.toLowerCase().includes(q) ||
         p.brand.toLowerCase().includes(q) ||
+        subLabel.toLowerCase().includes(q) ||
         (CATEGORIES.find((c) => c.id === p.category)?.label.toLowerCase().includes(q) ?? false)
-      return okCat && okSearch
+      return okCat && okSub && okSearch
     })
     switch (sort) {
       case 'menor-precio':
@@ -63,17 +81,20 @@ export function Catalog() {
         )
     }
     return list
-  }, [search, category, sort])
+  }, [search, category, subcategory, sort])
 
   // Reiniciar paginación al cambiar filtros
   useEffect(() => {
     setVisible(PAGE_SIZE)
-  }, [search, category, sort])
+  }, [search, category, subcategory, sort])
 
   const setCatAndGo = (c: Category | 'todos') => {
     setCategory(c)
+    setSubcategory(null)
     document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  const activeCatLabel = CATEGORIES.find((c) => c.id === category)?.label
 
   return (
     <section id="productos" className="relative scroll-mt-20 py-20 sm:py-24">
@@ -90,7 +111,7 @@ export function Catalog() {
             </h2>
           </div>
           <p className="max-w-sm text-sm text-white/50">
-            Stock real y precios actualizados desde nuestra tienda oficial de MercadoLibre.
+            Stock real de nuestro local. Elegí, consultá y te lo despachamos a todo el país.
           </p>
         </Reveal>
 
@@ -136,6 +157,29 @@ export function Catalog() {
               </select>
             </div>
           </div>
+
+          {/* Subcategorías de la categoría activa */}
+          {availableSubs.length > 0 && (
+            <div className="mt-2 flex flex-wrap items-center gap-2 px-1">
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/35">
+                {activeCatLabel}:
+              </span>
+              {availableSubs.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setSubcategory(subcategory === s.id ? null : s.id)}
+                  className={cn(
+                    'rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-300',
+                    subcategory === s.id
+                      ? 'bg-white text-black'
+                      : 'border border-line bg-panel text-white/55 hover:border-brand/50 hover:text-white',
+                  )}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          )}
         </Reveal>
 
         {/* Resultados */}
@@ -143,17 +187,21 @@ export function Catalog() {
           <span>
             {filtered.length} producto{filtered.length !== 1 && 's'}
             {category !== 'todos' && (
-              <> en <span className="font-semibold text-brand">{CATEGORIES.find((c) => c.id === category)?.label}</span></>
+              <> en <span className="font-semibold text-brand">{activeCatLabel}</span></>
+            )}
+            {subcategory && (
+              <> · <span className="font-semibold text-white">{SUBCATEGORIES.find((s) => s.id === subcategory)?.label}</span></>
             )}
             {search && (
               <> para <span className="font-semibold text-white">&ldquo;{search}&rdquo;</span></>
             )}
           </span>
-          {(search || category !== 'todos') && (
+          {(search || category !== 'todos' || subcategory) && (
             <button
               onClick={() => {
                 setSearch('')
                 setCategory('todos')
+                setSubcategory(null)
               }}
               className="rounded-full border border-line px-3 py-1 font-semibold text-white/60 transition hover:border-brand/60 hover:text-white"
             >
@@ -198,6 +246,7 @@ export function Catalog() {
               onClick={() => {
                 setSearch('')
                 setCategory('todos')
+                setSubcategory(null)
               }}
               className="rounded-xl bg-brand px-6 py-2.5 text-sm font-bold uppercase tracking-wide transition hover:bg-brand-600"
             >

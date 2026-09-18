@@ -1,7 +1,7 @@
 'use client'
 
-import { LayoutGrid, Lightbulb, Package, Shield, Sparkles, Wrench } from 'lucide-react'
-import { CATEGORIES, PRODUCTS, type Category } from '@/lib/products'
+import { LayoutGrid, Lightbulb, Package, Shield, Sparkles } from 'lucide-react'
+import { CATEGORIES, PRODUCTS, SUBCATEGORIES, type Category, type Subcategory } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { Reveal } from '@/components/reveal'
 
@@ -11,7 +11,6 @@ const ICONS: Record<string, typeof LayoutGrid> = {
   package: Package,
   shield: Shield,
   sparkles: Sparkles,
-  wrench: Wrench,
 }
 
 // Gradientes de fondo por categoría
@@ -20,27 +19,25 @@ const CARD_STYLES: Record<string, string> = {
     'bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,6,0,0.35),transparent_55%),linear-gradient(160deg,#1a1a1a_0%,#0a0a0a_100%)] md:row-span-2 md:min-h-[420px]',
   accesorios:
     'bg-[radial-gradient(ellipse_at_top_right,rgba(225,6,0,0.14),transparent_60%),linear-gradient(160deg,#161616,#0a0a0a)]',
-  alarmas:
+  seguridad:
     'bg-[radial-gradient(ellipse_at_bottom_right,rgba(225,6,0,0.14),transparent_60%),linear-gradient(160deg,#161616,#0a0a0a)]',
   estetica:
     'bg-[radial-gradient(ellipse_at_top_left,rgba(225,6,0,0.12),transparent_60%),linear-gradient(160deg,#161616,#0a0a0a)]',
-  tuercas:
-    'bg-[radial-gradient(ellipse_at_bottom,rgba(225,6,0,0.12),transparent_60%),linear-gradient(160deg,#161616,#0a0a0a)]',
 }
 
 const DESCRIPTIONS: Record<string, string> = {
-  iluminacion: 'Faros, barras y kits LED 12/24V con chips Cree y Osram. Lo que más sale de nuestro local.',
-  accesorios: 'Apoyabrazos, cubre alfombras, cargadores y todo para equipar tu vehículo.',
-  alarmas: 'Alarmas, cierres centralizados y seguridad para tu auto.',
+  iluminacion: 'Faros, barras y kits LED 12/24V, halógenas y luces de posición. Lo que más sale de nuestro local.',
+  accesorios: 'Estéreos, cargadores, medidores y todo para equipar tu vehículo.',
+  seguridad: 'Alarmas, cierres centralizados, tuercas antirrobo y criques.',
   estetica: 'Línea completa de estética vehicular. ¡Nuevos ingresos todos los meses!',
-  tuercas: 'Tuercas antirrobo, criques y herramientas de rueda.',
 }
 
 export function Categories() {
-  const { setCategory } = useStore()
+  const { setCategory, setSubcategory } = useStore()
 
-  const go = (c: Category | 'todos') => {
+  const go = (c: Category | 'todos', sub?: Subcategory) => {
     setCategory(c)
+    setSubcategory(sub ?? null)
     document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -59,13 +56,14 @@ export function Categories() {
             Comprá por <span className="text-brand">categoría</span>
           </h2>
           <p className="mt-3 text-sm text-white/50 sm:text-base">
-            Cinco rubros, un solo lugar: iluminación profesional, accesorios, seguridad y estética.
+            Cuatro rubros, un solo lugar: iluminación profesional, accesorios, seguridad y estética.
           </p>
         </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {CATEGORIES.filter((c) => c.id !== 'todos').map((c, i) => {
             const Icon = ICONS[c.icon] ?? LayoutGrid
+            const subs = SUBCATEGORIES.filter((s) => s.category === c.id)
             return (
               <Reveal key={c.id} delay={i * 80} className={c.id === 'iluminacion' ? 'md:row-span-2' : ''}>
                 <button
@@ -101,6 +99,34 @@ export function Categories() {
                     <p className="mt-1.5 max-w-xs text-xs leading-relaxed text-white/50 sm:text-sm">
                       {DESCRIPTIONS[c.id]}
                     </p>
+
+                    {/* Subcategorías clickeables */}
+                    {subs.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {subs.map((s) => (
+                          <span
+                            key={s.id}
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              go(c.id as Category, s.id)
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                go(c.id as Category, s.id as Subcategory)
+                              }
+                            }}
+                            className="rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-[10px] font-semibold text-white/60 backdrop-blur transition-all duration-300 hover:border-brand/60 hover:bg-brand hover:text-white"
+                          >
+                            {s.label}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
                     <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand transition-all duration-300 group-hover:gap-3">
                       Ver productos
                       <span aria-hidden>→</span>

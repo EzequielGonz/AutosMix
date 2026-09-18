@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Check, ShoppingCart, Star, Truck } from 'lucide-react'
+import { Check, ShoppingCart, Star } from 'lucide-react'
 import { formatPrice, type Product } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { cn } from '@/lib/utils'
@@ -85,13 +85,6 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
           )}
         </div>
 
-        {product.freeShipping && (
-          <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-bold text-emerald-400 backdrop-blur">
-            <Truck className="size-3" />
-            Envío gratis
-          </span>
-        )}
-
         {/* Overlay al hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       </a>
@@ -129,9 +122,9 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
             <p className="text-xs text-white/35 line-through">{formatPrice(product.oldPrice)}</p>
           )}
           <p className="font-display text-xl text-white">{formatPrice(product.price)}</p>
-          {product.installments && (
-            <p className="text-xs text-emerald-400/90">{product.installments}</p>
-          )}
+          <p className="text-[11px] font-semibold text-emerald-400/90">
+            10% OFF por transferencia
+          </p>
         </div>
 
         {/* Botón comprar */}

@@ -1,4 +1,9 @@
+/* AutosMix — tienda oficial */
 @import "tailwindcss";
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
 
 @theme {
   --color-brand: #e10600;

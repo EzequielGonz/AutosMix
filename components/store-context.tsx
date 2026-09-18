@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { Category, Product } from '@/lib/products'
+import type { Category, Product, Subcategory } from '@/lib/products'
 
 export type CartItem = { product: Product; qty: number }
 
@@ -32,6 +32,8 @@ type StoreContextType = {
   setSearch: (v: string) => void
   category: Category | 'todos'
   setCategory: (c: Category | 'todos') => void
+  subcategory: Subcategory | null
+  setSubcategory: (s: Subcategory | null) => void
 }
 
 const StoreContext = createContext<StoreContextType | null>(null)
@@ -42,6 +44,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [lastAdded, setLastAdded] = useState<Product | null>(null)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<Category | 'todos'>('todos')
+  const [subcategory, setSubcategory] = useState<Subcategory | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Cargar carrito guardado
@@ -117,8 +120,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setSearch,
       category,
       setCategory,
+      subcategory,
+      setSubcategory,
     }),
-    [items, count, total, isCartOpen, add, remove, setQty, clear, lastAdded, search, category],
+    [items, count, total, isCartOpen, add, remove, setQty, clear, lastAdded, search, category, subcategory],
   )
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

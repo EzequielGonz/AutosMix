@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ChevronDown, ShieldCheck, Sparkles, Truck, Wrench, Zap } from 'lucide-react'
+import { ChevronDown, ShieldCheck, Sparkles, Star, Truck, Wrench, Zap } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
 import { useStore } from '@/components/store-context'
 
 const BENEFITS = [
-  { icon: Zap, title: 'Iluminación LED', text: '12 y 24V · Chips Cree y Osram' },
-  { icon: Truck, title: 'Envío gratis', text: 'En compras desde $35.000' },
+  { icon: Zap, title: 'Iluminación LED', text: '12 y 24V · Kits Cree LED' },
+  { icon: Truck, title: 'Envíos por Andreani', text: 'A todo el país' },
   { icon: ShieldCheck, title: 'Garantía real', text: 'Productos con respaldo oficial' },
   { icon: Wrench, title: 'Asesoramiento', text: 'Te ayudamos a elegir lo justo' },
 ]
@@ -57,7 +57,7 @@ export function Hero() {
             alt="AutosMix"
             width={560}
             height={184}
-            className="w-72 max-w-full drop-shadow-[0_10px_45px_rgba(225,6,0,0.35)] sm:w-96 lg:w-[440px] animate-float"
+            className="w-72 max-w-full drop-shadow-[0_10px_45px_rgba(225,6,0,0.35)] sm:w-96 lg:w-[440px]"
             draggable={false}
           />
         </div>
@@ -69,8 +69,8 @@ export function Hero() {
           }`}
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-white backdrop-blur">
-            <Sparkles className="size-3.5 text-brand" />
-            +970 seguidores en MercadoLibre · Tienda oficial
+            <Star className="size-3.5 fill-brand text-brand" />
+            Reputación Platinum · Más de 10.000 ventas
           </span>
         </div>
 
@@ -129,7 +129,7 @@ export function Hero() {
           {[
             { label: 'Iluminación', icon: Zap, cat: 'iluminacion' as const },
             { label: 'Accesorios', icon: Sparkles, cat: 'accesorios' as const },
-            { label: 'Alarmas', icon: ShieldCheck, cat: 'alarmas' as const },
+            { label: 'Seguridad', icon: ShieldCheck, cat: 'seguridad' as const },
             { label: 'Estética', icon: Sparkles, cat: 'estetica' as const },
           ].map((c) => (
             <a
