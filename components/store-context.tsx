@@ -47,11 +47,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [subcategory, setSubcategory] = useState<Subcategory | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Cargar carrito guardado
+  // Cargar carrito guardado. Los productos viven dentro de los items;
+  // si el admin borró alguno, se descartan silenciosamente al hidratar.
   useEffect(() => {
     try {
       const raw = localStorage.getItem('autosmix-cart')
-      if (raw) setItems(JSON.parse(raw))
+      if (!raw) return
+      const parsed: CartItem[] = JSON.parse(raw)
+      if (!Array.isArray(parsed)) return
+      setItems(parsed.filter((i) => i && i.product && i.product.id && i.product.price >= 0 && i.qty > 0))
     } catch {
       /* carrito corrupto: se ignora */
     }
