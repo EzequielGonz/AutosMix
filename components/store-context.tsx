@@ -34,6 +34,10 @@ type StoreContextType = {
   setCategory: (c: Category | 'todos') => void
   subcategory: Subcategory | null
   setSubcategory: (s: Subcategory | null) => void
+  // Popup de detalle de producto
+  modalProduct: Product | null
+  openProduct: (p: Product) => void
+  closeModal: () => void
 }
 
 const StoreContext = createContext<StoreContextType | null>(null)
@@ -45,6 +49,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<Category | 'todos'>('todos')
   const [subcategory, setSubcategory] = useState<Subcategory | null>(null)
+  const [modalProduct, setModalProduct] = useState<Product | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Cargar carrito guardado. Los productos viven dentro de los items;
@@ -126,8 +131,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setCategory,
       subcategory,
       setSubcategory,
+      modalProduct,
+      openProduct: (p: Product) => setModalProduct(p),
+      closeModal: () => setModalProduct(null),
     }),
-    [items, count, total, isCartOpen, add, remove, setQty, clear, lastAdded, search, category, subcategory],
+    [items, count, total, isCartOpen, add, remove, setQty, clear, lastAdded, search, category, subcategory, modalProduct],
   )
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

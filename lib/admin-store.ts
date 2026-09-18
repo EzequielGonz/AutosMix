@@ -209,6 +209,9 @@ export function sanitizeProduct(input: unknown, existingIds: Set<string>): Produ
   if (p.subcategory) out.subcategory = p.subcategory as Product['subcategory']
   if (p.oldPrice && Number(p.oldPrice) > price) out.oldPrice = Math.round(Number(p.oldPrice))
   if (p.badge && ['MÁS VENDIDO', 'OFERTA', 'NUEVO', 'PREMIUM'].includes(p.badge)) out.badge = p.badge as Product['badge']
+  if (typeof p.description === 'string' && p.description.trim()) {
+    out.description = p.description.trim().slice(0, 2000)
+  }
   return out
 }
 

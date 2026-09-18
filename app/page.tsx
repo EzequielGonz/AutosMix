@@ -9,6 +9,7 @@ import { Footer } from '@/components/footer'
 import { CartDrawer } from '@/components/cart-drawer'
 import { CartToast } from '@/components/cart-toast'
 import { WhatsAppButton } from '@/components/whatsapp-button'
+import { ProductModal } from '@/components/product-modal'
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         {/* Overlays */}
         <CartDrawer />
         <CartToast />
+        <ProductModal />
         <WhatsAppButton />
       </Loader>
     </StoreProvider>

@@ -9,7 +9,8 @@
     "image": "/products/faro-moto-7.webp",
     "rating": 4.8,
     "reviews": 93,
-    "stock": 18
+    "stock": 18,
+    "description": "Óptica LED de 7 pulgadas para motos y cuatriciclos, con alta/baja, luz de posición y giro integrado. 75W de potencia real, carcasa de aluminio sellada y haz recortado para no encandilar. 12V."
   },
   {
     "id": "barra-180w",
@@ -23,7 +24,8 @@
     "badge": "OFERTA",
     "rating": 4.8,
     "reviews": 118,
-    "stock": 22
+    "stock": 22,
+    "description": "Barra LED de 80 cm con 60 LEDs de alta intensidad y 180W reales. Combinación flood + spot para 4x4, camiones y agro. Carcasa de aluminio con aletas de disipación, sellada IP67 para lluvia y barro. 12 y 24V."
   },
   {
     "id": "dakar-osram",
@@ -35,7 +37,8 @@
     "image": "/products/dakar-osram.webp",
     "rating": 4.7,
     "reviews": 77,
-    "stock": 34
+    "stock": 34,
+    "description": "Faro LED auxiliar IR100 de 20W y solo 7,5 cm, ideal como luz de trabajo o auxiliar en 4x4, motos y maquinaria. Aluminio fundido, lente resistente a impactos y sellado contra agua y polvo. 12 y 24V."
   },
   {
     "id": "faro-51w",
@@ -47,7 +50,8 @@
     "image": "/products/faro-51w.webp",
     "rating": 4.9,
     "reviews": 103,
-    "stock": 16
+    "stock": 16,
+    "description": "Par de faros LED auxiliares de 51W con 17 LEDs de alta luminosidad. El clásico para 4x4 y off road: haz de largo alcance, marco de acero inoxidable y montaje reforzado. 12 y 24V."
   },
   {
     "id": "barra-120w",
@@ -59,7 +63,8 @@
     "image": "/products/barra-120w.webp",
     "rating": 4.8,
     "reviews": 88,
-    "stock": 21
+    "stock": 21,
+    "description": "Juego X2 de barras LED compactas de 16 cm y 120W. Versátiles para moto, camión, 4x4 y agro: se montan en parrilla, paragolpes o barro antivuelco. Aluminio con lente PC antigolpes. 12-24V."
   },
   {
     "id": "barra-slim",
@@ -72,7 +77,8 @@
     "image": "/products/barra-slim.webp",
     "rating": 4.8,
     "reviews": 66,
-    "stock": 19
+    "stock": 19,
+    "description": "Barra LED ultra slim de 80 cm y 306W con doble función flood + spot. Perfil delgado de una sola fila, ideal para paragolpes y parrillas sin sacrificar potencia. Sellada IP68. 12 y 24V."
   },
   {
     "id": "faro-ovalado",
@@ -84,7 +90,8 @@
     "image": "/products/faro-ovalado.webp",
     "rating": 4.6,
     "reviews": 59,
-    "stock": 44
+    "stock": 44,
+    "description": "Faro LED ovalado de 24W para uso auxiliar en camionetas, 4x4 y maquinaria agrícola. Formato bajo que se integra al paragolpes, luz blanca pura y carcasa estanca. 12 y 24V."
   },
   {
     "id": "reflector-42w",
@@ -96,7 +103,8 @@
     "image": "/products/reflector-42w.webp",
     "rating": 4.6,
     "reviews": 47,
-    "stock": 36
+    "stock": 36,
+    "description": "Juego X2 de faros reflectores de 42W con 14 LEDs para off road. Haz combinado de alcance y amplitud, soportes de goma antivibratorios y terminación negra mate. 12 y 24V."
   },
   {
     "id": "ojo-angel",
@@ -109,7 +117,8 @@
     "badge": "NUEVO",
     "rating": 4.7,
     "reviews": 61,
-    "stock": 28
+    "stock": 28,
+    "description": "Kit de faros auxiliares con ojo de ángel (angel eyes) y lupa proyectora, 3200 lúmenes cada uno. Diseño agresivo con aro luminoso que funciona como posición. Perfectos para 4x4 y tuning. 12V."
   },
   {
     "id": "proyector-51w",
@@ -121,7 +130,8 @@
     "image": "/products/proyector-51w.webp",
     "rating": 4.7,
     "reviews": 45,
-    "stock": 31
+    "stock": 31,
+    "description": "Faro LED proyector de 51W con 17 LEDs de última generación y lente tipo lupa. Alcance superior al auxiliar común, ideal para rutas y campo. Aluminio fundido sellado. 12 y 24V."
   },
   {
     "id": "cree-h7",
@@ -134,7 +144,8 @@
     "badge": "MÁS VENDIDO",
     "rating": 4.9,
     "reviews": 214,
-    "stock": 32
+    "stock": 32,
+    "description": "Kit LED H7 IR100 Super Canbus con chip Cree y 60.000 lúmenes por par. luz blanca 6000K, sin error de tablero (Canbus) y con cooler de aluminio. El más elegido para alta gama. 12V."
   },
   {
     "id": "cree-h4-iron",
@@ -147,7 +158,8 @@
     "badge": "PREMIUM",
     "rating": 4.9,
     "reviews": 168,
-    "stock": 24
+    "stock": 24,
+    "description": "Kit Cree LED H4 Iron LED con proyector lupa: alta/baja real con haz recortado. Canbus integrado, 60.000 lúmenes y disipación activa. La opción premium para tu auto. 12V."
   },
   {
     "id": "kb4-dakar",
@@ -159,7 +171,8 @@
     "image": "/products/kb4-dakar.webp",
     "rating": 4.8,
     "reviews": 141,
-    "stock": 41
+    "stock": 41,
+    "description": "Kit Cree LED KB4 Iron Dakar plug & play: se conecta sin cortar cables ni adaptadores raros. Chip Cree, luz 6000K y tamaño compacto que entra en la mayoría de los faros. 12V."
   },
   {
     "id": "r8-csp",
@@ -173,7 +186,8 @@
     "oldPrice": 47990,
     "rating": 4.7,
     "reviews": 97,
-    "stock": 55
+    "stock": 55,
+    "description": "Kit Cree LED R8 sin cooler con chip CSP y 60.000 lúmenes. Disipación pasiva de aluminio aviación: sin ventilador, sin ruido y sin mantenimiento. 42W por par. 12V."
   },
   {
     "id": "h1-h3",
@@ -185,7 +199,8 @@
     "image": "/products/h1-h3.webp",
     "rating": 4.8,
     "reviews": 74,
-    "stock": 25
+    "stock": 25,
+    "description": "Kit Cree LED IR100 para H1 y H3, Super Canbus con 60.000 lúmenes. Ideal para faros antiniebla y auxiliares. Luz blanca pura, sin errores en tablero. 12V."
   },
   {
     "id": "hb4-9006",
@@ -197,7 +212,8 @@
     "image": "/products/h1-h3.webp",
     "rating": 4.8,
     "reviews": 69,
-    "stock": 23
+    "stock": 23,
+    "description": "Kit Cree LED HB4 9006 IR100 Super Canbus de 60.000 lúmenes. Reemplazo directo de las halógenas HB4/9006, con la misma calidad y garantía de la línea IR100. 12V."
   },
   {
     "id": "lampara-philips",
@@ -209,7 +225,8 @@
     "image": "/products/lampara-philips.webp",
     "rating": 4.8,
     "reviews": 91,
-    "stock": 52
+    "stock": 52,
+    "description": "Juego X2 de lámparas halógenas Philips H4 12V 60/55W P43T-38 Standard. Luz original de fábrica, la opción más confiable para reposición. Calidad Philips."
   },
   {
     "id": "t20-hilux",
@@ -221,7 +238,8 @@
     "image": "/products/t20-hilux.webp",
     "rating": 4.8,
     "reviews": 86,
-    "stock": 38
+    "stock": 38,
+    "description": "Kit X2 de lámparas LED T20 de posición diurna para Toyota Hilux y Corolla. Luz blanca de alta intensidad, se instalan directo sin modificaciones. Chip LED de larga duración."
   },
   {
     "id": "t20-duster",
@@ -233,7 +251,8 @@
     "image": "/products/t20-duster.webp",
     "rating": 4.8,
     "reviews": 72,
-    "stock": 30
+    "stock": 30,
+    "description": "Lámparas LED T20 de posición diurna para Renault Duster y Oroch 2015-2020. Formato plug & play, luz blanca pura y look moderno para tu camioneta."
   },
   {
     "id": "giro-amarok",
@@ -245,7 +264,8 @@
     "image": "/products/giro-amarok.webp",
     "rating": 4.7,
     "reviews": 64,
-    "stock": 27
+    "stock": 27,
+    "description": "Kit X2 de luces de giro LED secuenciales para guardabarros de VW Amarok, Bora y Golf. Función secuencial tipo premium, terminación fumé y encendido directo."
   },
   {
     "id": "t20-canbus",
@@ -257,7 +277,8 @@
     "image": "/products/t20-canbus.webp",
     "rating": 4.7,
     "reviews": 51,
-    "stock": 29
+    "stock": 29,
+    "description": "Lámparas LED T20 de 2 polos Canbus 7043 para luz diurna, juego X2 de la línea IR100. Sin error de tablero gracias al chip Canbus integrado."
   },
   {
     "id": "stereo-usb-aux",
@@ -270,7 +291,8 @@
     "badge": "OFERTA",
     "rating": 4.6,
     "reviews": 88,
-    "stock": 26
+    "stock": 26,
+    "description": "Estéreo bluetooth 1 DIN con USB, MP3, AUX, radio FM y SD. 60W X4 de potencia, pantalla led y control remoto. Compatible con cualquier auto. Instalación simple."
   },
   {
     "id": "stereo-fm-sd",
@@ -282,7 +304,8 @@
     "image": "/products/stereo-fm-sd.webp",
     "rating": 4.6,
     "reviews": 52,
-    "stock": 24
+    "stock": 24,
+    "description": "Estéreo bluetooth 1 DIN con USB, MP3, radio FM, AUX y entrada SD. 60W X4, display digital y control remoto. La opción más completa en su gama."
   },
   {
     "id": "medidor-presion",
@@ -294,7 +317,8 @@
     "badge": "MÁS VENDIDO",
     "rating": 4.7,
     "reviews": 156,
-    "stock": 60
+    "stock": 60,
+    "description": "Medidor digital de presión de neumáticos Oregon para auto, moto y bici. Pantalla LCD con luz, rango amplio y apagado automático. El más vendido del rubro."
   },
   {
     "id": "cargador-usb",
@@ -305,7 +329,8 @@
     "image": "/products/cargador-usb.webp",
     "rating": 4.6,
     "reviews": 84,
-    "stock": 48
+    "stock": 48,
+    "description": "Cargador adaptador con doble toma USB para embutir en tablero. 12V y 24V: sirve para autos, camionetas y camiones. Carga rápida y protección contra sobrecarga."
   },
   {
     "id": "eslinga",
@@ -316,7 +341,8 @@
     "image": "/products/eslinga.webp",
     "rating": 4.7,
     "reviews": 63,
-    "stock": 40
+    "stock": 40,
+    "description": "Linga soga de remolque de 5 toneladas con eslinga plana y ganchos forjados. Para sacar vehículos atascados con seguridad. Reforzada y con costura de alta resistencia."
   },
   {
     "id": "giros-universal",
@@ -327,7 +353,8 @@
     "image": "/products/giros-universal.webp",
     "rating": 4.5,
     "reviews": 42,
-    "stock": 70
+    "stock": 70,
+    "description": "Kit de giros/guiños fijos universales sin modificaciones. Instalación directa, luz ámbar visible y cuerpo sellado. Para auto, moto y trailer."
   },
   {
     "id": "cierre-kube",
@@ -340,7 +367,8 @@
     "badge": "NUEVO",
     "rating": 4.6,
     "reviews": 38,
-    "stock": 26
+    "stock": 26,
+    "description": "Kit de cierre centralizado universal Kube para 4 puertas. Incluye actuadores, central, cableado y 2 llaves de control. Compatible con cualquier vehículo. Facil instalación."
   },
   {
     "id": "proximo",
@@ -353,7 +381,8 @@
     "badge": "NUEVO",
     "rating": 4.6,
     "reviews": 12,
-    "stock": 15
+    "stock": 15,
+    "description": "Línea completa de tuercas antirrobo, criques (trinquetes) y herramientas de rueda. Consultá stock y modelos disponibles por WhatsApp: hay variantes para cada vehículo."
   },
   {
     "id": "microfibra",
@@ -365,6 +394,7 @@
     "badge": "NUEVO",
     "rating": 4.7,
     "reviews": 57,
-    "stock": 90
+    "stock": 90,
+    "description": "Paño de microfibra Crocos 40x60 cm de 230 gramos para secado grande. Ultra absorbente, sin rayar la pintura. Ideal para estética y lavado profesional."
   }
 ]

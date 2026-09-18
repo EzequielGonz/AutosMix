@@ -23,6 +23,7 @@ export type Product = {
   rating: number
   reviews: number
   stock: number
+  description?: string
 }
 
 export const CATEGORIES: { id: Category | 'todos'; label: string; icon: string }[] = [

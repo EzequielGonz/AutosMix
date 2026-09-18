@@ -14,7 +14,7 @@ const BADGE_STYLES: Record<string, string> = {
 }
 
 export function ProductCard({ product, index }: { product: Product; index: number }) {
-  const { add } = useStore()
+  const { add, openProduct } = useStore()
   const [added, setAdded] = useState(false)
   const [imgOk, setImgOk] = useState(true)
 
@@ -39,12 +39,12 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
       className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-panel transition-all duration-500 hover:-translate-y-1.5 hover:border-brand/50 hover:shadow-[0_20px_50px_-15px_rgba(225,6,0,0.35)]"
       style={{ animation: `fade-up 0.7s cubic-bezier(0.16,1,0.3,1) ${Math.min(index, 12) * 60}ms both` }}
     >
-      {/* Imagen */}
-      <a
-        href={product.image || undefined}
-        target="_blank"
-        rel="noreferrer"
-        className="relative block aspect-[4/3] overflow-hidden bg-[#0a0a0a]"
+      {/* Imagen (clic abre el popup de detalle) */}
+      <button
+        type="button"
+        onClick={() => openProduct(product)}
+        aria-label={`Ver detalle de ${product.name}`}
+        className="relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-[#0a0a0a]"
       >
         {product.image && imgOk ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -87,14 +87,17 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
 
         {/* Overlay al hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      </a>
+      </button>
 
       {/* Info */}
       <div className="flex flex-1 flex-col gap-1.5 p-4">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
           {product.brand}
         </p>
-        <h3 className="line-clamp-2 min-h-10 text-sm font-semibold leading-snug text-white/90 transition-colors group-hover:text-white">
+        <h3
+          onClick={() => openProduct(product)}
+          className="line-clamp-2 min-h-10 cursor-pointer text-sm font-semibold leading-snug text-white/90 transition-colors hover:text-brand"
+        >
           {product.name}
         </h3>
 

@@ -31,6 +31,12 @@ html {
   --animate-shine: shine 3.5s linear infinite;
   --animate-flyout: flyout 0.5s ease forwards;
   --animate-progress: progress 2.1s cubic-bezier(0.65, 0, 0.35, 1) both;
+  --animate-zoom-in: zoom-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes zoom-in {
+    from { opacity: 0; transform: scale(0.94) translateY(14px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
 
   @keyframes progress {
     from { transform: scaleX(0.05); }

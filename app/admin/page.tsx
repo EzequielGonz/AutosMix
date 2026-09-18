@@ -35,6 +35,7 @@ const EMPTY_FORM = {
   rating: '4.7',
   reviews: '0',
   stock: '10',
+  description: '',
 }
 
 type Status = { kind: 'idle' | 'busy' | 'ok' | 'error'; msg?: string; deployed?: boolean }
@@ -117,6 +118,7 @@ export default function AdminPage() {
       rating: String(p.rating),
       reviews: String(p.reviews),
       stock: String(p.stock),
+      description: p.description || '',
     })
     setShowForm(true)
     setStatus({ kind: 'idle' })
@@ -160,6 +162,7 @@ export default function AdminPage() {
         rating: Number(form.rating),
         reviews: Number(form.reviews),
         stock: Number(form.stock),
+        description: form.description || undefined,
       }
 
       const res = await fetch('/api/admin/products', {
@@ -353,6 +356,17 @@ export default function AdminPage() {
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="mt-1 w-full rounded-lg border border-line bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-brand"
                 placeholder="Kit Cree LED H4 …"
+              />
+            </label>
+
+            <label className="block text-sm text-white/60 sm:col-span-2">
+              Descripción (se muestra en el popup del producto)
+              <textarea
+                rows={4}
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                className="mt-1 w-full rounded-lg border border-line bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-brand"
+                placeholder="Potencia, voltaje, compatibilidad, qué incluye el kit…"
               />
             </label>
 
