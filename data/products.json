@@ -371,16 +371,17 @@
     "description": "Kit de cierre centralizado universal Kube para 4 puertas. Incluye actuadores, central, cableado y 2 llaves de control. Compatible con cualquier vehículo. Facil instalación."
   },
   {
-    "id": "microfibra",
-    "name": "Paño de Microfibra 40x60 cm 230 grs Crocos Secado Grande",
-    "price": 3999,
-    "category": "estetica",
-    "brand": "Divaio",
-    "image": "/products/microfibra.webp",
+    "id": "proximo",
+    "name": "Tuercas Antirrobo, Criques y Herramientas de Rueda · Consultar stock",
+    "price": 18999,
+    "category": "seguridad",
+    "subcategory": "tuercas",
+    "brand": "Oregon",
+    "image": "",
     "badge": "NUEVO",
-    "rating": 4.7,
-    "reviews": 57,
-    "stock": 90,
-    "description": "Paño de microfibra Crocos 40x60 cm de 230 gramos para secado grande. Ultra absorbente, sin rayar la pintura. Ideal para estética y lavado profesional."
+    "rating": 4.6,
+    "reviews": 12,
+    "stock": 15,
+    "description": "Línea completa de tuercas antirrobo, criques (trinquetes) y herramientas de rueda. Consultá stock y modelos disponibles por WhatsApp: hay variantes para cada vehículo."
   }
 ]
