@@ -1,5 +1,18 @@
 [
   {
+    "id": "faro-moto-7",
+    "name": "Faro Óptica LED 7 Pulgadas 75W Alta/Baja + Posición + Giro Moto",
+    "price": 44999,
+    "category": "iluminacion",
+    "subcategory": "faros-barras",
+    "brand": "Luxled",
+    "image": "/products/faro-moto-7.webp",
+    "rating": 4.8,
+    "reviews": 93,
+    "stock": 18,
+    "description": "Óptica LED de 7 pulgadas para motos y cuatriciclos, con alta/baja, luz de posición y giro integrado. 75W de potencia real, carcasa de aluminio sellada y haz recortado para no encandilar. 12V."
+  },
+  {
     "id": "barra-180w",
     "name": "Barra LED 80 cm 180W de Potencia · 60 LEDs 12/24V 4x4 Camión",
     "price": 60640,
@@ -370,18 +383,5 @@
     "reviews": 12,
     "stock": 15,
     "description": "Línea completa de tuercas antirrobo, criques (trinquetes) y herramientas de rueda. Consultá stock y modelos disponibles por WhatsApp: hay variantes para cada vehículo."
-  },
-  {
-    "id": "microfibra",
-    "name": "Paño de Microfibra 40x60 cm 230 grs Crocos Secado Grande",
-    "price": 3999,
-    "category": "estetica",
-    "brand": "Divaio",
-    "image": "/products/microfibra.webp",
-    "badge": "NUEVO",
-    "rating": 4.7,
-    "reviews": 57,
-    "stock": 90,
-    "description": "Paño de microfibra Crocos 40x60 cm de 230 gramos para secado grande. Ultra absorbente, sin rayar la pintura. Ideal para estética y lavado profesional."
   }
 ]
