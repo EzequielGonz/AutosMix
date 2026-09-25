@@ -13,21 +13,6 @@
     "description": "Óptica LED de 7 pulgadas para motos y cuatriciclos, con alta/baja, luz de posición y giro integrado. 75W de potencia real, carcasa de aluminio sellada y haz recortado para no encandilar. 12V."
   },
   {
-    "id": "barra-180w",
-    "name": "Barra LED 80 cm 180W de Potencia · 60 LEDs 12/24V 4x4 Camión",
-    "price": 60640,
-    "oldPrice": 64999,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Luxled",
-    "image": "/products/barra-180w.webp",
-    "badge": "OFERTA",
-    "rating": 4.8,
-    "reviews": 118,
-    "stock": 22,
-    "description": "Barra LED de 80 cm con 60 LEDs de alta intensidad y 180W reales. Combinación flood + spot para 4x4, camiones y agro. Carcasa de aluminio con aletas de disipación, sellada IP67 para lluvia y barro. 12 y 24V."
-  },
-  {
     "id": "dakar-osram",
     "name": "Faro LED Auxiliar 20W IR100 Dakar 7,5 cm 12/24V",
     "price": 38999,
@@ -357,17 +342,17 @@
     "description": "Kit de giros/guiños fijos universales sin modificaciones. Instalación directa, luz ámbar visible y cuerpo sellado. Para auto, moto y trailer."
   },
   {
-    "id": "proximo",
-    "name": "Tuercas Antirrobo, Criques y Herramientas de Rueda · Consultar stock",
-    "price": 18999,
+    "id": "cierre-kube",
+    "name": "Kit Cierre Centralizado Universal 4 Puertas Autos Kube",
+    "price": 25999,
     "category": "seguridad",
-    "subcategory": "tuercas",
-    "brand": "Oregon",
-    "image": "",
+    "subcategory": "alarmas",
+    "brand": "Kube",
+    "image": "/products/cierre-kube.webp",
     "badge": "NUEVO",
     "rating": 4.6,
-    "reviews": 12,
-    "stock": 15,
-    "description": "Línea completa de tuercas antirrobo, criques (trinquetes) y herramientas de rueda. Consultá stock y modelos disponibles por WhatsApp: hay variantes para cada vehículo."
+    "reviews": 38,
+    "stock": 26,
+    "description": "Kit de cierre centralizado universal Kube para 4 puertas. Incluye actuadores, central, cableado y 2 llaves de control. Compatible con cualquier vehículo. Facil instalación."
   }
 ]
