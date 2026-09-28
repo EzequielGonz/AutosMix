@@ -1,5 +1,18 @@
 [
   {
+    "id": "barra-120w",
+    "name": "X2 Faro LED Barra 120W 16 cm Moto / Camión / 4x4 / Agro 12-24V",
+    "price": 56999,
+    "category": "iluminacion",
+    "subcategory": "faros-barras",
+    "brand": "Luxled",
+    "image": "/products/barra-120w.webp",
+    "rating": 4.8,
+    "reviews": 88,
+    "stock": 21,
+    "description": "Juego X2 de barras LED compactas de 16 cm y 120W. Versátiles para moto, camión, 4x4 y agro: se montan en parrilla, paragolpes o barro antivuelco. Aluminio con lente PC antigolpes. 12-24V."
+  },
+  {
     "id": "barra-slim",
     "name": "Barra LED Ultra Slim 80 cm 306W Flood + Spot 12/24V",
     "price": 51409,
@@ -302,19 +315,5 @@
     "reviews": 38,
     "stock": 26,
     "description": "Kit de cierre centralizado universal Kube para 4 puertas. Incluye actuadores, central, cableado y 2 llaves de control. Compatible con cualquier vehículo. Facil instalación."
-  },
-  {
-    "id": "proximo",
-    "name": "Tuercas Antirrobo, Criques y Herramientas de Rueda · Consultar stock",
-    "price": 18999,
-    "category": "seguridad",
-    "subcategory": "tuercas",
-    "brand": "Oregon",
-    "image": "",
-    "badge": "NUEVO",
-    "rating": 4.6,
-    "reviews": 12,
-    "stock": 15,
-    "description": "Línea completa de tuercas antirrobo, criques (trinquetes) y herramientas de rueda. Consultá stock y modelos disponibles por WhatsApp: hay variantes para cada vehículo."
   }
 ]
