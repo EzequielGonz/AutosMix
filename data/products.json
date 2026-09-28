@@ -1,18 +1,5 @@
 [
   {
-    "id": "giro-amarok",
-    "name": "Luz Giro LED Secuencial Guardabarros VW Amarok / Bora / Golf X2 Fumê",
-    "price": 33000,
-    "category": "iluminacion",
-    "subcategory": "posicion",
-    "brand": "Iron LED",
-    "image": "/products/giro-amarok.webp",
-    "rating": 4.7,
-    "reviews": 64,
-    "stock": 27,
-    "description": "Kit X2 de luces de giro LED secuenciales para guardabarros de VW Amarok, Bora y Golf. Función secuencial tipo premium, terminación fumé y encendido directo."
-  },
-  {
     "id": "t20-canbus",
     "name": "Lámpara LED T20 2 Polos Canbus 7043 Diurna X 2 IR100",
     "price": 39999,
