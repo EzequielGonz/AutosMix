@@ -1,17 +1,5 @@
 [
   {
-    "id": "cargador-usb",
-    "name": "Cargador Adaptador Toma USB Auto Doble Embutir 12V / 24V",
-    "price": 14999,
-    "category": "accesorios",
-    "brand": "Kobo",
-    "image": "/products/cargador-usb.webp",
-    "rating": 4.6,
-    "reviews": 84,
-    "stock": 48,
-    "description": "Cargador adaptador con doble toma USB para embutir en tablero. 12V y 24V: sirve para autos, camionetas y camiones. Carga rápida y protección contra sobrecarga."
-  },
-  {
     "id": "eslinga",
     "name": "Linga Soga Remolque 5 Toneladas Oregon Eslinga Plana con Ganchos",
     "price": 13499,
