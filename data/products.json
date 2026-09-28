@@ -1,18 +1,5 @@
 [
   {
-    "id": "faro-ovalado",
-    "name": "Faro LED Ovalado 24W Auxiliar 4x4 Camioneta Agro 12/24V",
-    "price": 20899,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Oregon",
-    "image": "/products/faro-ovalado.webp",
-    "rating": 4.6,
-    "reviews": 59,
-    "stock": 44,
-    "description": "Faro LED ovalado de 24W para uso auxiliar en camionetas, 4x4 y maquinaria agrícola. Formato bajo que se integra al paragolpes, luz blanca pura y carcasa estanca. 12 y 24V."
-  },
-  {
     "id": "reflector-42w",
     "name": "Faro Auxiliar Reflector 4x4 LED Off Road 14 LEDs 42W Juego X2",
     "price": 19999,
