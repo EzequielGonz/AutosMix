@@ -1,18 +1,5 @@
 [
   {
-    "id": "barra-120w",
-    "name": "X2 Faro LED Barra 120W 16 cm Moto / Camión / 4x4 / Agro 12-24V",
-    "price": 56999,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Luxled",
-    "image": "/products/barra-120w.webp",
-    "rating": 4.8,
-    "reviews": 88,
-    "stock": 21,
-    "description": "Juego X2 de barras LED compactas de 16 cm y 120W. Versátiles para moto, camión, 4x4 y agro: se montan en parrilla, paragolpes o barro antivuelco. Aluminio con lente PC antigolpes. 12-24V."
-  },
-  {
     "id": "barra-slim",
     "name": "Barra LED Ultra Slim 80 cm 306W Flood + Spot 12/24V",
     "price": 51409,
