@@ -1,19 +1,5 @@
 [
   {
-    "id": "ojo-angel",
-    "name": "Kit Faro Auxiliar con Ojo de Ángel y Lupa 3200LM 7,5 cm 12V",
-    "price": 33000,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Luxled",
-    "image": "/products/ojo-angel.webp",
-    "badge": "NUEVO",
-    "rating": 4.7,
-    "reviews": 61,
-    "stock": 28,
-    "description": "Kit de faros auxiliares con ojo de ángel (angel eyes) y lupa proyectora, 3200 lúmenes cada uno. Diseño agresivo con aro luminoso que funciona como posición. Perfectos para 4x4 y tuning. 12V."
-  },
-  {
     "id": "proyector-51w",
     "name": "Faro LED Auxiliar Proyector 17 LEDs 51W 12 y 24V Off Road",
     "price": 39999,
