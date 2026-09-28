@@ -1,16 +1,16 @@
 [
   {
-    "id": "lampara-philips",
-    "name": "Lámpara Philips H4 12V 60/55W P43T-38 Standard Juego X2",
-    "price": 10999,
+    "id": "hb4-9006",
+    "name": "Kit Cree LED HB4 9006 IR100 Super Canbus 60.000 Lúmenes",
+    "price": 66550,
     "category": "iluminacion",
-    "subcategory": "halogenas",
-    "brand": "Philips",
-    "image": "/products/lampara-philips.webp",
+    "subcategory": "kits-cree",
+    "brand": "Iron LED",
+    "image": "/products/h1-h3.webp",
     "rating": 4.8,
-    "reviews": 91,
-    "stock": 52,
-    "description": "Juego X2 de lámparas halógenas Philips H4 12V 60/55W P43T-38 Standard. Luz original de fábrica, la opción más confiable para reposición. Calidad Philips."
+    "reviews": 69,
+    "stock": 23,
+    "description": "Kit Cree LED HB4 9006 IR100 Super Canbus de 60.000 lúmenes. Reemplazo directo de las halógenas HB4/9006, con la misma calidad y garantía de la línea IR100. 12V."
   },
   {
     "id": "t20-hilux",
