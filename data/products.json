@@ -1,20 +1,5 @@
 [
   {
-    "id": "r8-csp",
-    "name": "Kit Cree LED R8 Sin Cooler 60.000 Lúmenes 42W 12V",
-    "price": 39930,
-    "category": "iluminacion",
-    "subcategory": "kits-cree",
-    "brand": "Luxled",
-    "image": "/products/r8-csp.webp",
-    "badge": "OFERTA",
-    "oldPrice": 47990,
-    "rating": 4.7,
-    "reviews": 97,
-    "stock": 55,
-    "description": "Kit Cree LED R8 sin cooler con chip CSP y 60.000 lúmenes. Disipación pasiva de aluminio aviación: sin ventilador, sin ruido y sin mantenimiento. 42W por par. 12V."
-  },
-  {
     "id": "h1-h3",
     "name": "Kit Cree LED IR100 H1 / H3 Super Canbus 60.000 Lúmenes",
     "price": 66550,
