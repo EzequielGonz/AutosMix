@@ -1,19 +1,5 @@
 [
   {
-    "id": "cierre-kube",
-    "name": "Kit Cierre Centralizado Universal 4 Puertas Autos Kube",
-    "price": 25999,
-    "category": "seguridad",
-    "subcategory": "alarmas",
-    "brand": "Kube",
-    "image": "/products/cierre-kube.webp",
-    "badge": "NUEVO",
-    "rating": 4.6,
-    "reviews": 38,
-    "stock": 26,
-    "description": "Kit de cierre centralizado universal Kube para 4 puertas. Incluye actuadores, central, cableado y 2 llaves de control. Compatible con cualquier vehículo. Facil instalación."
-  },
-  {
     "id": "proximo",
     "name": "Tuercas Antirrobo, Criques y Herramientas de Rueda · Consultar stock",
     "price": 18999,
