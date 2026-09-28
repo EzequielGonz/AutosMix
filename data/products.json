@@ -1,17 +1,5 @@
 [
   {
-    "id": "giros-universal",
-    "name": "Kit Giros Fijos / Guiños Fijos Sin Modificaciones Universal",
-    "price": 5699,
-    "category": "accesorios",
-    "brand": "Kobo",
-    "image": "/products/giros-universal.webp",
-    "rating": 4.5,
-    "reviews": 42,
-    "stock": 70,
-    "description": "Kit de giros/guiños fijos universales sin modificaciones. Instalación directa, luz ámbar visible y cuerpo sellado. Para auto, moto y trailer."
-  },
-  {
     "id": "cierre-kube",
     "name": "Kit Cierre Centralizado Universal 4 Puertas Autos Kube",
     "price": 25999,
