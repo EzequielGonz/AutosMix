@@ -1,18 +1,5 @@
 [
   {
-    "id": "medidor-presion",
-    "name": "Medidor Digital de Presión de Neumáticos Auto / Moto / Bici Oregon",
-    "price": 12999,
-    "category": "accesorios",
-    "brand": "Oregon",
-    "image": "/products/medidor-presion.webp",
-    "badge": "MÁS VENDIDO",
-    "rating": 4.7,
-    "reviews": 156,
-    "stock": 60,
-    "description": "Medidor digital de presión de neumáticos Oregon para auto, moto y bici. Pantalla LCD con luz, rango amplio y apagado automático. El más vendido del rubro."
-  },
-  {
     "id": "cargador-usb",
     "name": "Cargador Adaptador Toma USB Auto Doble Embutir 12V / 24V",
     "price": 14999,
