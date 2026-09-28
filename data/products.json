@@ -1,18 +1,5 @@
 [
   {
-    "id": "stereo-fm-sd",
-    "name": "Stereo Bluetooth USB MP3 FM Aux SD 60W X4 Estéreo Auto",
-    "price": 36574,
-    "oldPrice": 38499,
-    "category": "accesorios",
-    "brand": "Kobo",
-    "image": "/products/stereo-fm-sd.webp",
-    "rating": 4.6,
-    "reviews": 52,
-    "stock": 24,
-    "description": "Estéreo bluetooth 1 DIN con USB, MP3, radio FM, AUX y entrada SD. 60W X4, display digital y control remoto. La opción más completa en su gama."
-  },
-  {
     "id": "medidor-presion",
     "name": "Medidor Digital de Presión de Neumáticos Auto / Moto / Bici Oregon",
     "price": 12999,
