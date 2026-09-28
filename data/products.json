@@ -1,18 +1,5 @@
 [
   {
-    "id": "t20-canbus",
-    "name": "Lámpara LED T20 2 Polos Canbus 7043 Diurna X 2 IR100",
-    "price": 39999,
-    "category": "iluminacion",
-    "subcategory": "posicion",
-    "brand": "Iron LED",
-    "image": "/products/t20-canbus.webp",
-    "rating": 4.7,
-    "reviews": 51,
-    "stock": 29,
-    "description": "Lámparas LED T20 de 2 polos Canbus 7043 para luz diurna, juego X2 de la línea IR100. Sin error de tablero gracias al chip Canbus integrado."
-  },
-  {
     "id": "stereo-usb-aux",
     "name": "Stereo Bluetooth USB MP3 Aux Radio FM SD 60W X4 Estéreo Auto",
     "price": 35002,
