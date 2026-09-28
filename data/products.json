@@ -1,18 +1,5 @@
 [
   {
-    "id": "kb4-dakar",
-    "name": "Kit Cree LED KB4 Iron Dakar Plug & Play Premium",
-    "price": 52497,
-    "category": "iluminacion",
-    "subcategory": "kits-cree",
-    "brand": "Iron LED",
-    "image": "/products/kb4-dakar.webp",
-    "rating": 4.8,
-    "reviews": 141,
-    "stock": 41,
-    "description": "Kit Cree LED KB4 Iron Dakar plug & play: se conecta sin cortar cables ni adaptadores raros. Chip Cree, luz 6000K y tamaño compacto que entra en la mayoría de los faros. 12V."
-  },
-  {
     "id": "r8-csp",
     "name": "Kit Cree LED R8 Sin Cooler 60.000 Lúmenes 42W 12V",
     "price": 39930,
