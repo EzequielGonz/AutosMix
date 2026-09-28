@@ -1,18 +1,5 @@
 [
   {
-    "id": "h1-h3",
-    "name": "Kit Cree LED IR100 H1 / H3 Super Canbus 60.000 Lúmenes",
-    "price": 66550,
-    "category": "iluminacion",
-    "subcategory": "kits-cree",
-    "brand": "Iron LED",
-    "image": "/products/h1-h3.webp",
-    "rating": 4.8,
-    "reviews": 74,
-    "stock": 25,
-    "description": "Kit Cree LED IR100 para H1 y H3, Super Canbus con 60.000 lúmenes. Ideal para faros antiniebla y auxiliares. Luz blanca pura, sin errores en tablero. 12V."
-  },
-  {
     "id": "hb4-9006",
     "name": "Kit Cree LED HB4 9006 IR100 Super Canbus 60.000 Lúmenes",
     "price": 66550,
