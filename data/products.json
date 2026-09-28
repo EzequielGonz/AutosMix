@@ -1,18 +1,5 @@
 [
   {
-    "id": "reflector-42w",
-    "name": "Faro Auxiliar Reflector 4x4 LED Off Road 14 LEDs 42W Juego X2",
-    "price": 19999,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Oregon",
-    "image": "/products/reflector-42w.webp",
-    "rating": 4.6,
-    "reviews": 47,
-    "stock": 36,
-    "description": "Juego X2 de faros reflectores de 42W con 14 LEDs para off road. Haz combinado de alcance y amplitud, soportes de goma antivibratorios y terminación negra mate. 12 y 24V."
-  },
-  {
     "id": "ojo-angel",
     "name": "Kit Faro Auxiliar con Ojo de Ángel y Lupa 3200LM 7,5 cm 12V",
     "price": 33000,
