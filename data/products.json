@@ -1,18 +1,5 @@
 [
   {
-    "id": "faro-moto-7",
-    "name": "Faro Óptica LED 7 Pulgadas 75W Alta/Baja + Posición + Giro Moto",
-    "price": 44999,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Luxled",
-    "image": "/products/faro-moto-7.webp",
-    "rating": 4.8,
-    "reviews": 93,
-    "stock": 18,
-    "description": "Óptica LED de 7 pulgadas para motos y cuatriciclos, con alta/baja, luz de posición y giro integrado. 75W de potencia real, carcasa de aluminio sellada y haz recortado para no encandilar. 12V."
-  },
-  {
     "id": "faro-51w",
     "name": "Par Faro LED 51W Auxiliar 17 LEDs 4x4 Off Road 12 y 24V",
     "price": 74999,
