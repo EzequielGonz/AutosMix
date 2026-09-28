@@ -1,19 +1,5 @@
 [
   {
-    "id": "cree-h7",
-    "name": "Kit Cree LED H7 IR100 Super Canbus Alta Gama 60.000 Lúmenes",
-    "price": 66550,
-    "category": "iluminacion",
-    "subcategory": "kits-cree",
-    "brand": "Iron LED",
-    "image": "/products/cree-h7.webp",
-    "badge": "MÁS VENDIDO",
-    "rating": 4.9,
-    "reviews": 214,
-    "stock": 32,
-    "description": "Kit LED H7 IR100 Super Canbus con chip Cree y 60.000 lúmenes por par. luz blanca 6000K, sin error de tablero (Canbus) y con cooler de aluminio. El más elegido para alta gama. 12V."
-  },
-  {
     "id": "cree-h4-iron",
     "name": "Kit Cree LED Canbus Proyector Lupa H4 Iron LED",
     "price": 84699,
