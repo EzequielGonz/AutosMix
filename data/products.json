@@ -1,18 +1,5 @@
 [
   {
-    "id": "t20-duster",
-    "name": "Lámpara LED Posición Diurna Renault Duster / Oroch 2015-2020 T20",
-    "price": 39999,
-    "category": "iluminacion",
-    "subcategory": "posicion",
-    "brand": "Iron LED",
-    "image": "/products/t20-duster.webp",
-    "rating": 4.8,
-    "reviews": 72,
-    "stock": 30,
-    "description": "Lámparas LED T20 de posición diurna para Renault Duster y Oroch 2015-2020. Formato plug & play, luz blanca pura y look moderno para tu camioneta."
-  },
-  {
     "id": "giro-amarok",
     "name": "Luz Giro LED Secuencial Guardabarros VW Amarok / Bora / Golf X2 Fumê",
     "price": 33000,
