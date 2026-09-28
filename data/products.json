@@ -1,17 +1,5 @@
 [
   {
-    "id": "eslinga",
-    "name": "Linga Soga Remolque 5 Toneladas Oregon Eslinga Plana con Ganchos",
-    "price": 13499,
-    "category": "accesorios",
-    "brand": "Oregon",
-    "image": "/products/eslinga.webp",
-    "rating": 4.7,
-    "reviews": 63,
-    "stock": 40,
-    "description": "Linga soga de remolque de 5 toneladas con eslinga plana y ganchos forjados. Para sacar vehículos atascados con seguridad. Reforzada y con costura de alta resistencia."
-  },
-  {
     "id": "giros-universal",
     "name": "Kit Giros Fijos / Guiños Fijos Sin Modificaciones Universal",
     "price": 5699,
