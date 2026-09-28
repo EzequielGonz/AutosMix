@@ -1,18 +1,5 @@
 [
   {
-    "id": "proyector-51w",
-    "name": "Faro LED Auxiliar Proyector 17 LEDs 51W 12 y 24V Off Road",
-    "price": 39999,
-    "category": "iluminacion",
-    "subcategory": "faros-barras",
-    "brand": "Luxled",
-    "image": "/products/proyector-51w.webp",
-    "rating": 4.7,
-    "reviews": 45,
-    "stock": 31,
-    "description": "Faro LED proyector de 51W con 17 LEDs de última generación y lente tipo lupa. Alcance superior al auxiliar común, ideal para rutas y campo. Aluminio fundido sellado. 12 y 24V."
-  },
-  {
     "id": "cree-h7",
     "name": "Kit Cree LED H7 IR100 Super Canbus Alta Gama 60.000 Lúmenes",
     "price": 66550,
