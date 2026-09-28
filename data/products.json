@@ -1,19 +1,5 @@
 [
   {
-    "id": "stereo-usb-aux",
-    "name": "Stereo Bluetooth USB MP3 Aux Radio FM SD 60W X4 Estéreo Auto",
-    "price": 35002,
-    "oldPrice": 38499,
-    "category": "accesorios",
-    "brand": "Kobo",
-    "image": "/products/stereo-usb-aux.webp",
-    "badge": "OFERTA",
-    "rating": 4.6,
-    "reviews": 88,
-    "stock": 26,
-    "description": "Estéreo bluetooth 1 DIN con USB, MP3, AUX, radio FM y SD. 60W X4 de potencia, pantalla led y control remoto. Compatible con cualquier auto. Instalación simple."
-  },
-  {
     "id": "stereo-fm-sd",
     "name": "Stereo Bluetooth USB MP3 FM Aux SD 60W X4 Estéreo Auto",
     "price": 36574,
