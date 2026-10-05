@@ -36,6 +36,10 @@ const EMPTY_FORM = {
   reviews: '0',
   stock: '10',
   description: '',
+  weight: '',
+  length: '',
+  width: '',
+  height: '',
 }
 
 type Status = { kind: 'idle' | 'busy' | 'ok' | 'error'; msg?: string; deployed?: boolean }
@@ -53,17 +57,40 @@ export default function AdminPage() {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const fileRef = useRef<HTMLInputElement>(null)
-  const [deployInfo, setDeployInfo] = useState('')
+  const formRef = useRef<HTMLFormElement>(null)
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState('')
+  const busy = status.kind === 'busy'
 
-  const load = useCallback(async () => {
-    const res = await fetch('/api/admin/products', { cache: 'no-store' })
-    if (res.status === 401) {
-      setAuthed(false)
+  // URL de vista previa de la foto elegida (se libera al cambiarla).
+  useEffect(() => {
+    if (!file) {
+      setPreview('')
       return
     }
-    const data = await res.json()
-    setProducts(data.products || [])
-    setAuthed(true)
+    const url = URL.createObjectURL(file)
+    setPreview(url)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/products', { cache: 'no-store' })
+      if (res.status === 401) {
+        setAuthed(false)
+        return
+      }
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setStatus({ kind: 'error', msg: data.error || 'No pude cargar los productos' })
+      } else {
+        setProducts(data.products || [])
+      }
+      setAuthed(true)
+    } catch {
+      setStatus({ kind: 'error', msg: 'Sin conexión con el servidor. Revisá tu internet y recargá.' })
+      setAuthed((a) => (a === null ? false : a))
+    }
   }, [])
 
   useEffect(() => {
@@ -96,11 +123,28 @@ export default function AdminPage() {
     setProducts([])
   }
 
+  const resetFile = () => {
+    setFile(null)
+    if (fileRef.current) fileRef.current.value = ''
+  }
+
+  const closeForm = () => {
+    setShowForm(false)
+    setEditing(null)
+    setForm(EMPTY_FORM)
+    resetFile()
+  }
+
+  const scrollToForm = () =>
+    requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+
   const openCreate = () => {
     setEditing(null)
     setForm(EMPTY_FORM)
+    resetFile()
     setShowForm(true)
     setStatus({ kind: 'idle' })
+    scrollToForm()
   }
 
   const openEdit = (p: Product) => {
@@ -119,83 +163,95 @@ export default function AdminPage() {
       reviews: String(p.reviews),
       stock: String(p.stock),
       description: p.description || '',
+      weight: p.weight ? String(p.weight) : '',
+      length: p.length ? String(p.length) : '',
+      width: p.width ? String(p.width) : '',
+      height: p.height ? String(p.height) : '',
     })
+    resetFile()
     setShowForm(true)
     setStatus({ kind: 'idle' })
-  }
-
-  const uploadImage = async (file: File): Promise<string | null> => {
-    const fd = new FormData()
-    fd.append('file', file)
-    const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-    const data = await res.json().catch(() => ({}))
-    if (!res.ok || !data.ok) {
-      setStatus({ kind: 'error', msg: data.error || 'No pude subir la imagen' })
-      return null
-    }
-    return data.path
+    scrollToForm()
   }
 
   const submit = async (e: React.FormEvent) =>
     setAbortDefault(e, async () => {
-      setStatus({ kind: 'busy', msg: editing ? 'Guardando cambios…' : 'Creando producto…' })
-
-      // Imagen nueva elegida en el formulario.
-      const file = fileRef.current?.files?.[0]
-      let imagePath = form.image
-      if (file) {
-        const uploaded = await uploadImage(file)
-        if (!uploaded) return
-        imagePath = uploaded
-      }
+      if (busy) return
+      const isEdit = !!editing
+      setStatus({ kind: 'busy', msg: isEdit ? 'Guardando cambios…' : 'Creando producto…' })
 
       const product = {
-        id: form.id || undefined,
         name: form.name,
-        price: Number(form.price),
-        oldPrice: form.oldPrice ? Number(form.oldPrice) : undefined,
+        price: form.price,
+        oldPrice: form.oldPrice,
         category: form.category,
-        subcategory: form.subcategory || undefined,
+        subcategory: form.subcategory,
         brand: form.brand,
-        image: imagePath,
-        badge: form.badge || undefined,
-        rating: Number(form.rating),
-        reviews: Number(form.reviews),
-        stock: Number(form.stock),
-        description: form.description || undefined,
+        image: form.image,
+        badge: form.badge,
+        rating: form.rating,
+        reviews: form.reviews,
+        stock: form.stock,
+        description: form.description,
+        weight: form.weight,
+        length: form.length,
+        width: form.width,
+        height: form.height,
       }
 
-      const res = await fetch('/api/admin/products', {
-        method: editing ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editing ? { id: editing.id, product } : { product }),
-      })
-      const data = await res.json().catch(() => ({}))
-
-      if (!res.ok || !data.ok) {
-        setStatus({ kind: 'error', msg: data.error || 'No pude guardar' })
-        return
+      // Producto + foto viajan juntos: un solo commit / un solo redeploy.
+      const fd = new FormData()
+      fd.append('product', JSON.stringify(product))
+      if (editing) fd.append('id', editing.id)
+      if (file) {
+        setStatus({ kind: 'busy', msg: 'Optimizando la imagen…' })
+        const optimized = await compressImage(file)
+        if (optimized.size > 4 * 1024 * 1024) {
+          setStatus({ kind: 'error', msg: 'La imagen es demasiado pesada (máx. 4 MB). Probá con otra.' })
+          return
+        }
+        fd.append('file', optimized)
+        setStatus({ kind: 'busy', msg: isEdit ? 'Guardando cambios…' : 'Creando producto…' })
       }
 
-      setProducts(data.products)
-      setShowForm(false)
-      setEditing(null)
-      setForm(EMPTY_FORM)
-      if (fileRef.current) fileRef.current.value = ''
-      setStatus({ kind: 'ok', msg: editing ? 'Producto actualizado' : 'Producto creado', deployed: data.deployed })
+      try {
+        const res = await fetch('/api/admin/products', { method: isEdit ? 'PUT' : 'POST', body: fd })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || !data.ok) {
+          setStatus({
+            kind: 'error',
+            msg: data.error || (res.status === 413 ? 'La imagen es demasiado pesada' : `No pude guardar (${res.status})`),
+          })
+          if (res.status === 401) setAuthed(false)
+          return
+        }
+        setProducts(data.products)
+        closeForm()
+        setStatus({ kind: 'ok', msg: isEdit ? 'Producto actualizado' : 'Producto creado', deployed: data.deployed })
+      } catch {
+        setStatus({ kind: 'error', msg: 'Se cortó la conexión mientras guardaba. Recargá la lista para ver si se guardó.' })
+      }
     })
 
   const remove = async (p: Product) => {
+    if (busy) return
     if (!confirm(`¿Borrar "${p.name}"? Esta acción no se puede deshacer.`)) return
     setStatus({ kind: 'busy', msg: 'Borrando…' })
-    const res = await fetch(`/api/admin/products?id=${encodeURIComponent(p.id)}`, { method: 'DELETE' })
-    const data = await res.json().catch(() => ({}))
-    if (!res.ok || !data.ok) {
-      setStatus({ kind: 'error', msg: data.error || 'No pude borrar' })
-      return
+    try {
+      const res = await fetch(`/api/admin/products?id=${encodeURIComponent(p.id)}`, { method: 'DELETE' })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok || !data.ok) {
+        setStatus({ kind: 'error', msg: data.error || `No pude borrar (${res.status})` })
+        if (res.status === 401) setAuthed(false)
+        if (res.status === 404) load()
+        return
+      }
+      setProducts(data.products)
+      if (editing?.id === p.id) closeForm()
+      setStatus({ kind: 'ok', msg: `"${p.name}" borrado`, deployed: data.deployed })
+    } catch {
+      setStatus({ kind: 'error', msg: 'Se cortó la conexión. Recargá la lista para ver si se borró.' })
     }
-    setProducts(data.products)
-    setStatus({ kind: 'ok', msg: `"${p.name}" borrado`, deployed: data.deployed })
   }
 
   const filtered = products.filter((p) =>
@@ -322,7 +378,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-      {deployInfo && <p className="mb-4 text-xs text-white/40">{deployInfo}</p>}
 
       {/* Buscador */}
       <div className="relative mb-4">
@@ -337,12 +392,12 @@ export default function AdminPage() {
 
       {/* Formulario */}
       {showForm && (
-        <form onSubmit={submit} className="mb-6 rounded-2xl border border-line bg-panel p-5">
+        <form ref={formRef} onSubmit={submit} className="mb-6 scroll-mt-4 rounded-2xl border border-line bg-panel p-5">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-semibold">
               {editing ? 'Editar producto' : 'Nuevo producto'}
             </h2>
-            <button type="button" onClick={() => setShowForm(false)} className="text-white/40 hover:text-white">
+            <button type="button" onClick={closeForm} className="text-white/40 hover:text-white">
               <X className="size-5" />
             </button>
           </div>
@@ -482,20 +537,42 @@ export default function AdminPage() {
             </label>
 
             <div className="sm:col-span-2">
+              <span className="block text-sm text-white/60">
+                Envío Andreani (opcional · si lo dejás vacío se usa 1 kg y 20×15×10 cm)
+              </span>
+              <div className="mt-1 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {(
+                  [
+                    ['weight', 'Peso (kg)', '0.001'],
+                    ['length', 'Largo (cm)', '0.1'],
+                    ['width', 'Ancho (cm)', '0.1'],
+                    ['height', 'Alto (cm)', '0.1'],
+                  ] as const
+                ).map(([key, label, step]) => (
+                  <label key={key} className="block text-xs text-white/50">
+                    {label}
+                    <input
+                      type="number"
+                      min="0"
+                      step={step}
+                      value={form[key]}
+                      onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                      className="mt-1 w-full rounded-lg border border-line bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-brand"
+                    />
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="sm:col-span-2">
               <span className="block text-sm text-white/60">Imagen</span>
               <div className="mt-2 flex items-center gap-4">
                 <div className="grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl border border-line bg-black/40">
-                  {form.image || fileRef.current?.files?.[0] ? (
+                  {preview ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={
-                        fileRef.current?.files?.[0]
-                          ? URL.createObjectURL(fileRef.current.files[0])
-                          : form.image
-                      }
-                      alt="Vista previa"
-                      className="size-full object-contain"
-                    />
+                    <img src={preview} alt="Vista previa" className="size-full object-contain" />
+                  ) : form.image ? (
+                    <AdminImg key={form.image} src={form.image} alt="Vista previa" />
                   ) : (
                     <span className="text-xs text-white/30">Sin foto</span>
                   )}
@@ -505,16 +582,33 @@ export default function AdminPage() {
                     ref={fileRef}
                     type="file"
                     accept="image/webp,image/jpeg,image/png"
-                    onChange={() => setForm({ ...form })}
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
                     className="block w-full text-sm text-white/60 file:mr-3 file:rounded-lg file:border-0 file:bg-brand file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-600"
                   />
-                  <input
-                    value={form.image}
-                    onChange={(e) => setForm({ ...form, image: e.target.value })}
-                    placeholder="…o pegá una ruta de imagen (/products/foto.webp)"
-                    className="w-full rounded-lg border border-line bg-black/40 px-3 py-2 text-xs text-white outline-none focus:border-brand"
-                  />
-                  <p className="text-xs text-white/30">WebP, JPG o PNG · hasta 5 MB</p>
+                  {file ? (
+                    <button type="button" onClick={resetFile} className="text-xs text-white/50 hover:text-white">
+                      Descartar la foto nueva
+                    </button>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input
+                        value={form.image}
+                        onChange={(e) => setForm({ ...form, image: e.target.value })}
+                        placeholder="…o pegá una ruta de imagen (/products/foto.webp)"
+                        className="w-full rounded-lg border border-line bg-black/40 px-3 py-2 text-xs text-white outline-none focus:border-brand"
+                      />
+                      {form.image && (
+                        <button
+                          type="button"
+                          onClick={() => setForm({ ...form, image: '' })}
+                          className="shrink-0 rounded-lg border border-line px-3 text-xs text-white/60 hover:text-white"
+                        >
+                          Quitar
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  <p className="text-xs text-white/30">WebP, JPG o PNG · se optimiza automáticamente</p>
                 </div>
               </div>
             </div>
@@ -523,14 +617,14 @@ export default function AdminPage() {
           <div className="mt-5 flex gap-2">
             <button
               type="submit"
-              disabled={status.kind === 'busy'}
+              disabled={busy}
               className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold transition hover:bg-brand-600 disabled:opacity-50"
             >
               {editing ? 'Guardar cambios' : 'Crear producto'}
             </button>
             <button
               type="button"
-              onClick={() => setShowForm(false)}
+              onClick={closeForm}
               className="rounded-lg border border-line px-5 py-2.5 text-sm text-white/70 transition hover:text-white"
             >
               Cancelar
@@ -546,8 +640,7 @@ export default function AdminPage() {
             <div key={p.id} className="flex items-center gap-3 bg-panel p-3 transition hover:bg-panel-2">
               <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-lg border border-line bg-black/40">
                 {p.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.image} alt="" className="size-full object-contain" />
+                  <AdminImg key={p.image} src={p.image} alt="" />
                 ) : (
                   <span className="text-[10px] text-white/30">s/foto</span>
                 )}
@@ -562,15 +655,17 @@ export default function AdminPage() {
               </div>
               <button
                 onClick={() => openEdit(p)}
+                disabled={busy}
                 title="Editar"
-                className="rounded-lg p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
+                className="rounded-lg p-2 text-white/60 transition hover:bg-white/5 hover:text-white disabled:opacity-30"
               >
                 <Pencil className="size-4" />
               </button>
               <button
                 onClick={() => remove(p)}
+                disabled={busy}
                 title="Borrar"
-                className="rounded-lg p-2 text-white/60 transition hover:bg-brand/10 hover:text-brand"
+                className="rounded-lg p-2 text-white/60 transition hover:bg-brand/10 hover:text-brand disabled:opacity-30"
               >
                 <Trash2 className="size-4" />
               </button>
@@ -584,10 +679,50 @@ export default function AdminPage() {
 
       <p className="mt-6 text-center text-xs text-white/30">
         Los cambios se guardan en <code className="rounded bg-black/40 px-1">data/products.json</code> y la
-        tienda se actualiza sola en el próximo despliegue.
+        tienda se actualiza sola en el próximo despliegue (~1 min).
       </p>
     </div>
   )
+}
+
+/**
+ * Imagen del catálogo. Si todavía no está desplegada (recién subida), la pide
+ * al endpoint del admin, que la lee directo del repo.
+ */
+function AdminImg({ src, alt }: { src: string; alt: string }) {
+  const [url, setUrl] = useState(src)
+  const [failed, setFailed] = useState(false)
+  if (failed) return <span className="text-[10px] text-white/30">sin foto</span>
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={url}
+      alt={alt}
+      className="size-full object-contain"
+      onError={() => {
+        if (url === src && src.startsWith('/products/')) setUrl(`/api/admin/image?path=${encodeURIComponent(src)}`)
+        else setFailed(true)
+      }}
+    />
+  )
+}
+
+/** Redimensiona a máx. 1600 px y convierte a WebP para que el upload sea liviano. */
+async function compressImage(file: File): Promise<File> {
+  try {
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bitmap.width * scale)
+    canvas.height = Math.round(bitmap.height * scale)
+    canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/webp', 0.85))
+    if (!blob || blob.type !== 'image/webp' || blob.size >= file.size) return file
+    return new File([blob], file.name.replace(/\.\w+$/, '') + '.webp', { type: 'image/webp' })
+  } catch {
+    return file
+  }
 }
 
 async function setAbortDefault(e: React.FormEvent, fn: () => Promise<void>) {

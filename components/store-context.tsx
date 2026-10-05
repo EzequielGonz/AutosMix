@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { Category, Product, Subcategory } from '@/lib/products'
+import { PRODUCTS, type Category, type Product, type Subcategory } from '@/lib/products'
 
 export type CartItem = { product: Product; qty: number }
 
@@ -52,15 +52,24 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [modalProduct, setModalProduct] = useState<Product | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Cargar carrito guardado. Los productos viven dentro de los items;
-  // si el admin borró alguno, se descartan silenciosamente al hidratar.
+  // Cargar carrito guardado. Cada item se re-sincroniza con el catálogo
+  // actual: si el admin cambió precio/foto/stock se toma lo nuevo, y si borró
+  // el producto se descarta.
   useEffect(() => {
     try {
       const raw = localStorage.getItem('autosmix-cart')
       if (!raw) return
       const parsed: CartItem[] = JSON.parse(raw)
       if (!Array.isArray(parsed)) return
-      setItems(parsed.filter((i) => i && i.product && i.product.id && i.product.price >= 0 && i.qty > 0))
+      const byId = new Map(PRODUCTS.map((p) => [p.id, p]))
+      setItems(
+        parsed.flatMap((i) => {
+          const product = i?.product?.id ? byId.get(i.product.id) : undefined
+          const qty = Math.round(Number(i?.qty))
+          if (!product || !(qty > 0)) return []
+          return [{ product, qty: product.stock > 0 ? Math.min(qty, product.stock) : qty }]
+        }),
+      )
     } catch {
       /* carrito corrupto: se ignora */
     }
@@ -80,7 +89,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const found = prev.find((i) => i.product.id === p.id)
       if (found) {
         return prev.map((i) =>
-          i.product.id === p.id ? { ...i, qty: Math.min(i.qty + 1, p.stock) } : i,
+          i.product.id === p.id ? { ...i, qty: p.stock > 0 ? Math.min(i.qty + 1, p.stock) : i.qty + 1 } : i,
         )
       }
       return [...prev, { product: p, qty: 1 }]
@@ -98,7 +107,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setItems((prev) =>
       qty <= 0
         ? prev.filter((i) => i.product.id !== id)
-        : prev.map((i) => (i.product.id === id ? { ...i, qty } : i)),
+        : prev.map((i) =>
+            i.product.id === id ? { ...i, qty: i.product.stock > 0 ? Math.min(qty, i.product.stock) : qty } : i,
+          ),
     )
   }, [])
 

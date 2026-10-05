@@ -1,13 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Minus, Plus, ShoppingCart, Trash2, X, Zap, ExternalLink, Truck, CreditCard } from 'lucide-react'
 import { formatPrice, STORE } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { cn } from '@/lib/utils'
+import { ShippingQuote, shippingCost, shippingLine, type ShippingChoice } from '@/components/shipping-quote'
 
 export function CartDrawer() {
   const { items, isCartOpen, closeCart, remove, setQty, total, count, clear } = useStore()
+  const [shipping, setShipping] = useState<ShippingChoice>({ kind: 'coordinar' })
+  const grandTotal = total + shippingCost(shipping)
 
   // Bloquear scroll y cerrar con Escape
   useEffect(() => {
@@ -26,7 +29,7 @@ export function CartDrawer() {
       (i) => `• ${i.qty}x ${i.product.name} — ${formatPrice(i.qty * i.product.price)}`,
     )
     return encodeURIComponent(
-      `¡Hola AutosMix! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\nTotal: ${formatPrice(total)}\nEnvío por Andreani a coordinar.\n\nMi nombre: `,
+      `¡Hola AutosMix! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\nSubtotal: ${formatPrice(total)}\n${shippingLine(shipping)}\nTotal: ${formatPrice(grandTotal)}\n\nMi nombre: `,
     )
   }
 
@@ -161,7 +164,7 @@ export function CartDrawer() {
 
         {/* Footer con checkout */}
         {items.length > 0 && (
-          <div className="border-t border-line bg-panel/60 px-5 py-4 backdrop-blur">
+          <div className="max-h-[70dvh] overflow-y-auto border-t border-line bg-panel/60 px-5 py-4 backdrop-blur">
             <div className="flex items-center justify-between text-sm">
               <span className="text-white/60">Subtotal</span>
               <span className="font-semibold">{formatPrice(total)}</span>
@@ -173,13 +176,20 @@ export function CartDrawer() {
                 transferencia
               </span>
             </p>
-            <p className="mt-1 flex items-center gap-1.5 text-xs text-white/45">
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-white/60">
               <Truck className="size-3.5 shrink-0 text-brand" />
-              <span>Envío a todo el país por Andreani · se coordina al confirmar</span>
+              <span>Envío a todo el país por Andreani</span>
             </p>
+            <ShippingQuote items={items} value={shipping} onChange={setShipping} />
+            {shippingCost(shipping) > 0 && (
+              <div className="mt-2 flex items-center justify-between text-sm">
+                <span className="text-white/60">Envío</span>
+                <span className="font-semibold">{formatPrice(shippingCost(shipping))}</span>
+              </div>
+            )}
             <div className="mt-2 flex items-center justify-between border-t border-line pt-3">
               <span className="font-display uppercase">Total</span>
-              <span className="font-display text-2xl text-brand">{formatPrice(total)}</span>
+              <span className="font-display text-2xl text-brand">{formatPrice(grandTotal)}</span>
             </div>
 
             {/* Checkout WhatsApp */}

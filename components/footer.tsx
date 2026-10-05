@@ -105,9 +105,9 @@ export function Footer() {
               Iluminación LED, accesorios y seguridad vehicular. Envíos a todo el país por Andreani.
             </p>
             <div className="mt-5 flex flex-wrap gap-3 text-xs text-white/50">
-              <span className="inline-flex items-center gap-1.5">
-                <Truck className="size-4 text-brand" /> Envíos por Andreani
-              </span>
+              <a href="/seguimiento" className="inline-flex items-center gap-1.5 transition hover:text-brand">
+                <Truck className="size-4 text-brand" /> Seguí tu envío Andreani
+              </a>
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="size-4 text-brand" /> Garantía real
               </span>

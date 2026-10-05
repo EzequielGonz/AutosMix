@@ -24,6 +24,12 @@ export type Product = {
   reviews: number
   stock: number
   description?: string
+  /** Peso en kg (para cotizar el envío). */
+  weight?: number
+  /** Medidas del paquete en cm (para cotizar el envío). */
+  length?: number
+  width?: number
+  height?: number
 }
 
 export const CATEGORIES: { id: Category | 'todos'; label: string; icon: string }[] = [
