@@ -95,7 +95,7 @@ type SucursalApi = {
   descripcion: string
   direccion?: { calle?: string; numero?: string; localidad?: string; codigoPostal?: string }
   horarioDeAtencion?: string
-  datosAdicionales?: { entregaEnvios?: boolean }
+  datosAdicionales?: { entregaEnvios?: boolean; seHaceAtencionAlCliente?: boolean; tipo?: string }
 }
 
 /** Sucursales Andreani que entregan envíos en un código postal (API pública). */
@@ -107,7 +107,13 @@ export async function branchesFor(cp: string): Promise<Branch[]> {
     if (!res.ok) return []
     const list = (await res.json()) as SucursalApi[]
     return list
-      .filter((s) => s.datosAdicionales?.entregaEnvios !== false)
+      // Solo sucursales con atención al público (excluye depósitos y centros de distribución).
+      .filter(
+        (s) =>
+          s.datosAdicionales?.entregaEnvios !== false &&
+          s.datosAdicionales?.seHaceAtencionAlCliente !== false &&
+          (!s.datosAdicionales?.tipo || s.datosAdicionales.tipo === 'SUCURSAL'),
+      )
       .slice(0, 5)
       .map((s) => ({
         id: String(s.id),

@@ -1,0 +1,15 @@
+{
+  "zones": [
+    { "id": "mdp", "label": "Mar del Plata y Batán", "ranges": "7600-7613", "domicilio": null, "sucursal": null },
+    { "id": "amba", "label": "CABA y Gran Buenos Aires", "ranges": "1000-1999", "domicilio": null, "sucursal": null },
+    {
+      "id": "pba",
+      "label": "Resto de Provincia de Buenos Aires",
+      "ranges": "2700-2999, 6000-6299, 6400-6799, 7000-7599, 7614-8199",
+      "domicilio": null,
+      "sucursal": null
+    },
+    { "id": "resto", "label": "Resto del país", "ranges": "", "domicilio": null, "sucursal": null }
+  ],
+  "freeFrom": null
+}

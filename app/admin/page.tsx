@@ -11,8 +11,10 @@ import {
   RefreshCw,
   Search,
   Trash2,
+  Truck,
   X,
 } from 'lucide-react'
+import { ShippingPanel } from './shipping-panel'
 import {
   CATEGORIES,
   SUBCATEGORIES,
@@ -55,6 +57,7 @@ export default function AdminPage() {
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [editing, setEditing] = useState<Product | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [showShipping, setShowShipping] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const fileRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -339,6 +342,15 @@ export default function AdminPage() {
             <ExternalLink className="size-4" />
           </a>
           <button
+            onClick={() => setShowShipping((v) => !v)}
+            title="Tarifas de envío"
+            className={`flex items-center gap-1.5 rounded-lg border p-2.5 text-sm transition hover:text-white ${
+              showShipping ? 'border-brand text-white' : 'border-line bg-panel text-white/70'
+            }`}
+          >
+            <Truck className="size-4" /> <span className="hidden sm:inline">Envíos</span>
+          </button>
+          <button
             onClick={logout}
             title="Cerrar sesión"
             className="rounded-lg border border-line bg-panel p-2.5 text-white/70 transition hover:text-white"
@@ -378,6 +390,8 @@ export default function AdminPage() {
           </div>
         </div>
       )}
+
+      {showShipping && <ShippingPanel onClose={() => setShowShipping(false)} />}
 
       {/* Buscador */}
       <div className="relative mb-4">

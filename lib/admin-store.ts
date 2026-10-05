@@ -225,6 +225,48 @@ export async function updateCatalog(
   }
 }
 
+/** Lee un JSON de `data/` (desde la rama en modo GitHub). */
+export async function loadDataFile<T>(name: string, fallback: T): Promise<T> {
+  try {
+    if (ghToken()) {
+      const buf = await readRepoFile(`data/${name}`, await headSha())
+      return buf ? (JSON.parse(buf.toString('utf8')) as T) : fallback
+    }
+    const { readFile } = await import('fs/promises')
+    return JSON.parse(await readFile(await localPath('data', name), 'utf8')) as T
+  } catch (e) {
+    if (e instanceof StoreError) throw e
+    return fallback
+  }
+}
+
+/** Guarda un JSON en `data/` (commit a GitHub en producción). */
+export async function saveDataFile(name: string, data: unknown, message: string): Promise<SaveResult> {
+  const content = Buffer.from(JSON.stringify(data, null, 2) + '\n', 'utf8')
+  try {
+    if (!ghToken()) {
+      const { writeFile } = await import('fs/promises')
+      await writeFile(await localPath('data', name), content).catch(() => {
+        throw new StoreError('No pude escribir el archivo. En producción configurá GITHUB_TOKEN.', 500)
+      })
+      return { ok: true, mode: 'local', deployed: false }
+    }
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (await commitFiles(await headSha(), [{ path: `data/${name}`, content }], message)) {
+        return { ok: true, mode: 'github', deployed: true }
+      }
+    }
+    throw new StoreError('Hubo varios cambios simultáneos y no pude guardar. Probá de nuevo.', 409)
+  } catch (e) {
+    return {
+      ok: false,
+      mode: ghToken() ? 'github' : 'local',
+      status: e instanceof StoreError ? e.status : 500,
+      error: e instanceof Error ? e.message : String(e),
+    }
+  }
+}
+
 /** Lee una imagen de producto (para previsualizar en el admin antes del redeploy). */
 export async function readProductImage(publicPath: string): Promise<Buffer | null> {
   if (!/^\/products\/[\w.-]+$/.test(publicPath)) return null

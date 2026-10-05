@@ -12,7 +12,7 @@ export type ShippingChoice =
   | { kind: 'domicilio' | 'sucursal'; cp: string; cost: number; branch?: string }
 
 type Branch = { id: string; nombre: string; direccion: string; horario?: string }
-type QuoteResult = { cp: string; domicilio: number | null; sucursal: number | null; sucursales: Branch[] }
+type QuoteResult = { cp: string; zona?: string; domicilio: number | null; sucursal: number | null; sucursales: Branch[] }
 
 const CP_KEY = 'autosmix-cp'
 
@@ -81,8 +81,8 @@ export function ShippingQuote({
         setError(data.error || 'No pudimos cotizar el envío')
       } else {
         setResult(data)
-        if (data.domicilio) onChange({ kind: 'domicilio', cp: clean, cost: data.domicilio })
-        else if (data.sucursal) onChange({ kind: 'sucursal', cp: clean, cost: data.sucursal, branch: data.sucursales?.[0]?.nombre })
+        if (data.domicilio != null) onChange({ kind: 'domicilio', cp: clean, cost: data.domicilio })
+        else if (data.sucursal != null) onChange({ kind: 'sucursal', cp: clean, cost: data.sucursal, branch: data.sucursales?.[0]?.nombre })
       }
     } catch {
       setError('Sin conexión. Probá de nuevo.')
@@ -139,6 +139,7 @@ export function ShippingQuote({
         </button>
       </form>
       {error && <p className="mt-1.5 text-xs text-brand">{error}</p>}
+      {result?.zona && <p className="mt-1.5 text-[10px] text-white/40">Zona: {result.zona} · precio estimado</p>}
 
       <div className="mt-2 space-y-1.5">
         {result?.domicilio != null &&
@@ -147,7 +148,7 @@ export function ShippingQuote({
             () => onChange({ kind: 'domicilio', cp: result.cp, cost: result.domicilio! }),
             <Truck className="size-3.5 text-brand" />,
             'Andreani a domicilio',
-            formatPrice(result.domicilio),
+            money(result.domicilio),
           )}
         {result?.sucursal != null &&
           option(
@@ -162,7 +163,7 @@ export function ShippingQuote({
                 </span>
               )}
             </>,
-            formatPrice(result.sucursal),
+            money(result.sucursal),
           )}
         {option(value.kind === 'retiro', () => onChange({ kind: 'retiro' }), <Store className="size-3.5 text-brand" />, `Retiro en ${STORE.address}`, 'Gratis')}
       </div>
@@ -170,14 +171,16 @@ export function ShippingQuote({
   )
 }
 
+const money = (v: number) => (v === 0 ? 'Gratis' : formatPrice(v))
+
 export const shippingCost = (c: ShippingChoice) => (c.kind === 'domicilio' || c.kind === 'sucursal' ? c.cost : 0)
 
 export function shippingLine(c: ShippingChoice): string {
   switch (c.kind) {
     case 'domicilio':
-      return `Envío Andreani a domicilio (CP ${c.cp}): ${formatPrice(c.cost)}`
+      return `Envío Andreani a domicilio (CP ${c.cp}): ${money(c.cost)}`
     case 'sucursal':
-      return `Envío Andreani a sucursal${c.branch ? ` ${c.branch}` : ''} (CP ${c.cp}): ${formatPrice(c.cost)}`
+      return `Envío Andreani a sucursal${c.branch ? ` ${c.branch}` : ''} (CP ${c.cp}): ${money(c.cost)}`
     case 'retiro':
       return `Retiro en el local (${STORE.address})`
     default:
