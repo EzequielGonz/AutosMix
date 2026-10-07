@@ -5,12 +5,19 @@ import { Minus, Plus, ShoppingCart, Trash2, X, Zap, ExternalLink, Truck, CreditC
 import { formatPrice, STORE } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { cn } from '@/lib/utils'
-import { ShippingQuote, shippingCost, shippingLine, type ShippingChoice } from '@/components/shipping-quote'
+import { ShippingQuote, shippingCost, type ShippingChoice } from '@/components/shipping-quote'
+import { CheckoutForm } from '@/components/checkout-form'
 
 export function CartDrawer() {
   const { items, isCartOpen, closeCart, remove, setQty, total, count, clear } = useStore()
   const [shipping, setShipping] = useState<ShippingChoice>({ kind: 'coordinar' })
   const grandTotal = total + shippingCost(shipping)
+  // Paso del checkout: el carrito, o el formulario de datos antes de WhatsApp.
+  const [step, setStep] = useState<'cart' | 'datos'>('cart')
+
+  useEffect(() => {
+    if (!isCartOpen || items.length === 0) setStep('cart')
+  }, [isCartOpen, items.length])
 
   // Bloquear scroll y cerrar con Escape
   useEffect(() => {
@@ -23,15 +30,6 @@ export function CartDrawer() {
       window.removeEventListener('keydown', onKey)
     }
   }, [isCartOpen, closeCart])
-
-  const whatsappMessage = () => {
-    const lines = items.map(
-      (i) => `• ${i.qty}x ${i.product.name} — ${formatPrice(i.qty * i.product.price)}`,
-    )
-    return encodeURIComponent(
-      `¡Hola AutosMix! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\nSubtotal: ${formatPrice(total)}\n${shippingLine(shipping)}\nTotal: ${formatPrice(grandTotal)}\n\nMi nombre: `,
-    )
-  }
 
   return (
     <>
@@ -73,7 +71,9 @@ export function CartDrawer() {
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-5 py-4">
-          {items.length === 0 ? (
+          {step === 'datos' && items.length > 0 ? (
+            <CheckoutForm items={items} total={total} shipping={shipping} onBack={() => setStep('cart')} />
+          ) : items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
               <div className="flex size-20 items-center justify-center rounded-full bg-brand/10">
                 <ShoppingCart className="size-9 text-brand/70" />
@@ -163,7 +163,7 @@ export function CartDrawer() {
         </div>
 
         {/* Footer con checkout */}
-        {items.length > 0 && (
+        {items.length > 0 && step === 'cart' && (
           <div className="max-h-[70dvh] overflow-y-auto border-t border-line bg-panel/60 px-5 py-4 backdrop-blur">
             <div className="flex items-center justify-between text-sm">
               <span className="text-white/60">Subtotal</span>
@@ -193,16 +193,15 @@ export function CartDrawer() {
             </div>
 
             {/* Checkout WhatsApp */}
-            <a
-              href={`https://wa.me/${STORE.whatsapp}?text=${whatsappMessage()}`}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative mt-4 flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-brand text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_25px_rgba(225,6,0,0.4)] transition-all duration-300 hover:bg-brand-600 active:scale-[0.98]"
+            <button
+              type="button"
+              onClick={() => setStep('datos')}
+              className="group relative mt-4 w-full flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-brand text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_25px_rgba(225,6,0,0.4)] transition-all duration-300 hover:bg-brand-600 active:scale-[0.98]"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <Zap className="size-4" />
-              Finalizar por WhatsApp
-            </a>
+              Finalizar compra
+            </button>
 
             {/* MercadoLibre */}
             <a

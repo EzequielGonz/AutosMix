@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   Check,
+  ClipboardPaste,
   ExternalLink,
   LogOut,
   Pencil,
@@ -15,6 +16,7 @@ import {
   X,
 } from 'lucide-react'
 import { ShippingPanel } from './shipping-panel'
+import { SalesPanel } from './sales-panel'
 import {
   CATEGORIES,
   SUBCATEGORIES,
@@ -58,6 +60,7 @@ export default function AdminPage() {
   const [editing, setEditing] = useState<Product | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [showShipping, setShowShipping] = useState(false)
+  const [showSales, setShowSales] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const fileRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -325,7 +328,7 @@ export default function AdminPage() {
           <h1 className="font-[family-name:var(--font-archivo-black)] text-2xl">Productos</h1>
           <p className="text-sm text-white/50">{products.length} productos</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={load}
             title="Recargar"
@@ -341,6 +344,15 @@ export default function AdminPage() {
           >
             <ExternalLink className="size-4" />
           </a>
+          <button
+            onClick={() => setShowSales((v) => !v)}
+            title="Registrar venta"
+            className={`flex items-center gap-1.5 rounded-lg border p-2.5 text-sm transition hover:text-white ${
+              showSales ? 'border-brand text-white' : 'border-line bg-panel text-white/70'
+            }`}
+          >
+            <ClipboardPaste className="size-4" /> <span className="hidden sm:inline">Ventas</span>
+          </button>
           <button
             onClick={() => setShowShipping((v) => !v)}
             title="Tarifas de envío"
@@ -391,6 +403,7 @@ export default function AdminPage() {
         </div>
       )}
 
+      {showSales && <SalesPanel products={products} onProducts={setProducts} onClose={() => setShowSales(false)} />}
       {showShipping && <ShippingPanel onClose={() => setShowShipping(false)} />}
 
       {/* Buscador */}

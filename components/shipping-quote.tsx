@@ -12,6 +12,8 @@ export type ShippingChoice =
   | { kind: 'domicilio' | 'sucursal'; cp: string; cost: number; branch?: string }
 
 type Branch = { id: string; nombre: string; direccion: string; horario?: string }
+const branchLabel = (b?: Branch) => (b ? `${b.nombre} (${b.direccion})` : undefined)
+
 type QuoteResult = { cp: string; zona?: string; domicilio: number | null; sucursal: number | null; sucursales: Branch[] }
 
 const CP_KEY = 'autosmix-cp'
@@ -82,7 +84,7 @@ export function ShippingQuote({
       } else {
         setResult(data)
         if (data.domicilio != null) onChange({ kind: 'domicilio', cp: clean, cost: data.domicilio })
-        else if (data.sucursal != null) onChange({ kind: 'sucursal', cp: clean, cost: data.sucursal, branch: data.sucursales?.[0]?.nombre })
+        else if (data.sucursal != null) onChange({ kind: 'sucursal', cp: clean, cost: data.sucursal, branch: branchLabel(data.sucursales?.[0]) })
       }
     } catch {
       setError('Sin conexión. Probá de nuevo.')
@@ -153,11 +155,13 @@ export function ShippingQuote({
         {result?.sucursal != null &&
           option(
             value.kind === 'sucursal',
-            () => onChange({ kind: 'sucursal', cp: result.cp, cost: result.sucursal!, branch: result.sucursales[0]?.nombre }),
+            () =>
+              value.kind !== 'sucursal' &&
+              onChange({ kind: 'sucursal', cp: result.cp, cost: result.sucursal!, branch: branchLabel(result.sucursales[0]) }),
             <MapPin className="size-3.5 text-brand" />,
             <>
               Retiro en sucursal Andreani
-              {result.sucursales[0] && (
+              {value.kind !== 'sucursal' && result.sucursales[0] && (
                 <span className="block text-[10px] text-white/40">
                   {result.sucursales[0].nombre} · {result.sucursales[0].direccion}
                 </span>
@@ -165,6 +169,34 @@ export function ShippingQuote({
             </>,
             money(result.sucursal),
           )}
+        {value.kind === 'sucursal' && result && result.sucursales.length > 0 && (
+          <div className="space-y-1 rounded-lg border border-line bg-ink/60 p-2" role="radiogroup" aria-label="Sucursal Andreani">
+            <p className="px-1 text-[10px] uppercase tracking-widest text-white/40">Elegí la sucursal</p>
+            {result.sucursales.map((b) => {
+              const label = branchLabel(b)!
+              const active = value.branch === label
+              return (
+                <button
+                  key={b.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => onChange({ ...value, branch: label })}
+                  className={cn(
+                    'block w-full rounded-md px-2 py-1.5 text-left text-[11px] transition',
+                    active ? 'bg-brand/15 text-white' : 'text-white/55 hover:bg-white/5',
+                  )}
+                >
+                  <span className="font-semibold">{b.nombre}</span>
+                  <span className="block text-[10px] text-white/40">
+                    {b.direccion}
+                    {b.horario ? ` · ${b.horario}` : ''}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        )}
         {option(value.kind === 'retiro', () => onChange({ kind: 'retiro' }), <Store className="size-3.5 text-brand" />, `Retiro en ${STORE.address}`, 'Gratis')}
       </div>
     </div>
@@ -180,7 +212,7 @@ export function shippingLine(c: ShippingChoice): string {
     case 'domicilio':
       return `Envío Andreani a domicilio (CP ${c.cp}): ${money(c.cost)}`
     case 'sucursal':
-      return `Envío Andreani a sucursal${c.branch ? ` ${c.branch}` : ''} (CP ${c.cp}): ${money(c.cost)}`
+      return `Envío Andreani a sucursal (CP ${c.cp}): ${money(c.cost)}`
     case 'retiro':
       return `Retiro en el local (${STORE.address})`
     default:

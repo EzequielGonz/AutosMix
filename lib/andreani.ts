@@ -93,6 +93,7 @@ export type Branch = { id: string; nombre: string; direccion: string; horario?: 
 type SucursalApi = {
   id: number
   descripcion: string
+  canal?: string
   direccion?: { calle?: string; numero?: string; localidad?: string; codigoPostal?: string }
   horarioDeAtencion?: string
   datosAdicionales?: { entregaEnvios?: boolean; seHaceAtencionAlCliente?: boolean; tipo?: string }
@@ -107,12 +108,13 @@ export async function branchesFor(cp: string): Promise<Branch[]> {
     if (!res.ok) return []
     const list = (await res.json()) as SucursalApi[]
     return list
-      // Solo sucursales con atención al público (excluye depósitos y centros de distribución).
+      // Solo puntos de atención al público (canal B2C) que entregan envíos;
+      // excluye depósitos y centros operativos.
       .filter(
         (s) =>
+          (!s.canal || s.canal === 'B2C') &&
           s.datosAdicionales?.entregaEnvios !== false &&
-          s.datosAdicionales?.seHaceAtencionAlCliente !== false &&
-          (!s.datosAdicionales?.tipo || s.datosAdicionales.tipo === 'SUCURSAL'),
+          s.datosAdicionales?.seHaceAtencionAlCliente !== false,
       )
       .slice(0, 5)
       .map((s) => ({
