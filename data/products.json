@@ -1,5 +1,17 @@
 [
   {
+    "id": "producto-de-prueba-tutorial",
+    "name": "PRODUCTO DE PRUEBA - TUTORIAL",
+    "price": 199998,
+    "category": "iluminacion",
+    "brand": "Iron LED",
+    "image": "",
+    "rating": 4.7,
+    "reviews": 0,
+    "stock": 10,
+    "description": "Esta es la guia para la subida de productos a AUTOSMIX"
+  },
+  {
     "id": "faro-led-auxiliar-proyector-9-led-27w-of-58",
     "name": "Faro Led Auxiliar Proyector 9 Led 27w Off Road 12v 24v X 2",
     "price": 14249,
