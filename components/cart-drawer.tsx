@@ -1,13 +1,23 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Minus, Plus, ShoppingCart, Trash2, X, Zap, ExternalLink, Truck, CreditCard } from 'lucide-react'
 import { formatPrice, STORE } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { cn } from '@/lib/utils'
+import { ShippingQuote, shippingCost, type ShippingChoice } from '@/components/shipping-quote'
+import { CheckoutForm } from '@/components/checkout-form'
 
 export function CartDrawer() {
   const { items, isCartOpen, closeCart, remove, setQty, total, count, clear } = useStore()
+  const [shipping, setShipping] = useState<ShippingChoice>({ kind: 'coordinar' })
+  const grandTotal = total + shippingCost(shipping)
+  // Paso del checkout: el carrito, o el formulario de datos antes de WhatsApp.
+  const [step, setStep] = useState<'cart' | 'datos'>('cart')
+
+  useEffect(() => {
+    if (!isCartOpen || items.length === 0) setStep('cart')
+  }, [isCartOpen, items.length])
 
   // Bloquear scroll y cerrar con Escape
   useEffect(() => {
@@ -20,15 +30,6 @@ export function CartDrawer() {
       window.removeEventListener('keydown', onKey)
     }
   }, [isCartOpen, closeCart])
-
-  const whatsappMessage = () => {
-    const lines = items.map(
-      (i) => `• ${i.qty}x ${i.product.name} — ${formatPrice(i.qty * i.product.price)}`,
-    )
-    return encodeURIComponent(
-      `¡Hola AutosMix! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\nTotal: ${formatPrice(total)}\nEnvío por Andreani a coordinar.\n\nMi nombre: `,
-    )
-  }
 
   return (
     <>
@@ -70,7 +71,9 @@ export function CartDrawer() {
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-5 py-4">
-          {items.length === 0 ? (
+          {step === 'datos' && items.length > 0 ? (
+            <CheckoutForm items={items} total={total} shipping={shipping} onBack={() => setStep('cart')} />
+          ) : items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
               <div className="flex size-20 items-center justify-center rounded-full bg-brand/10">
                 <ShoppingCart className="size-9 text-brand/70" />
@@ -160,8 +163,8 @@ export function CartDrawer() {
         </div>
 
         {/* Footer con checkout */}
-        {items.length > 0 && (
-          <div className="border-t border-line bg-panel/60 px-5 py-4 backdrop-blur">
+        {items.length > 0 && step === 'cart' && (
+          <div className="max-h-[70dvh] overflow-y-auto border-t border-line bg-panel/60 px-5 py-4 backdrop-blur">
             <div className="flex items-center justify-between text-sm">
               <span className="text-white/60">Subtotal</span>
               <span className="font-semibold">{formatPrice(total)}</span>
@@ -173,26 +176,32 @@ export function CartDrawer() {
                 transferencia
               </span>
             </p>
-            <p className="mt-1 flex items-center gap-1.5 text-xs text-white/45">
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-white/60">
               <Truck className="size-3.5 shrink-0 text-brand" />
-              <span>Envío a todo el país por Andreani · se coordina al confirmar</span>
+              <span>Envío a todo el país por Andreani</span>
             </p>
+            <ShippingQuote items={items} value={shipping} onChange={setShipping} />
+            {shippingCost(shipping) > 0 && (
+              <div className="mt-2 flex items-center justify-between text-sm">
+                <span className="text-white/60">Envío</span>
+                <span className="font-semibold">{formatPrice(shippingCost(shipping))}</span>
+              </div>
+            )}
             <div className="mt-2 flex items-center justify-between border-t border-line pt-3">
               <span className="font-display uppercase">Total</span>
-              <span className="font-display text-2xl text-brand">{formatPrice(total)}</span>
+              <span className="font-display text-2xl text-brand">{formatPrice(grandTotal)}</span>
             </div>
 
             {/* Checkout WhatsApp */}
-            <a
-              href={`https://wa.me/${STORE.whatsapp}?text=${whatsappMessage()}`}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative mt-4 flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-brand text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_25px_rgba(225,6,0,0.4)] transition-all duration-300 hover:bg-brand-600 active:scale-[0.98]"
+            <button
+              type="button"
+              onClick={() => setStep('datos')}
+              className="group relative mt-4 w-full flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-brand text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_25px_rgba(225,6,0,0.4)] transition-all duration-300 hover:bg-brand-600 active:scale-[0.98]"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <Zap className="size-4" />
-              Finalizar por WhatsApp
-            </a>
+              Finalizar compra
+            </button>
 
             {/* MercadoLibre */}
             <a
