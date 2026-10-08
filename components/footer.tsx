@@ -9,8 +9,14 @@ export function Footer() {
   const { setCategory } = useStore()
 
   const goCat = (id: string) => {
+    const section = document.getElementById('productos')
+    // En la página de un producto no está el catálogo: se vuelve a la tienda.
+    if (!section) {
+      window.location.href = `/?cat=${id}#productos`
+      return
+    }
     setCategory(id as Category | 'todos')
-    document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth' })
+    section.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -74,7 +80,8 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="font-semibold">Horarios</p>
-                  <p className="mt-0.5 text-sm text-white/55">Lunes a sábados · 9 a 13 hs y 16 a 18 hs</p>
+                  <p className="mt-0.5 text-sm text-white/55">Lunes a viernes · 9 a 13 hs y 16 a 18 hs</p>
+                  <p className="text-sm text-white/55">Sábados · 9 a 13 hs</p>
                 </div>
               </div>
             </Reveal>

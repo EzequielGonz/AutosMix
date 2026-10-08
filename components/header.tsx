@@ -10,17 +10,27 @@ import {
 import { useStore } from '@/components/store-context'
 
 const LINKS = [
-  { href: '#productos', label: 'Productos' },
-  { href: '#categorias', label: 'Categorías' },
-  { href: '#marcas', label: 'Marcas' },
-  { href: '#nosotros', label: 'Nosotros' },
-  { href: '#contacto', label: 'Contacto' },
+  { href: '/#productos', label: 'Productos' },
+  { href: '/#categorias', label: 'Categorías' },
+  { href: '/#marcas', label: 'Marcas' },
+  { href: '/#nosotros', label: 'Nosotros' },
+  { href: '/#contacto', label: 'Contacto' },
 ]
 
 export function Header() {
   const { count, openCart, search, setSearch } = useStore()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  // Fuera de la tienda (página de un producto), Enter lleva al catálogo con la búsqueda.
+  const goSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return
+    if (document.getElementById('productos')) {
+      document.getElementById('productos')!.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      window.location.href = `/?q=${encodeURIComponent(search)}#productos`
+    }
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -39,7 +49,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:h-[72px]">
         {/* Logo */}
-        <a href="#inicio" className="flex shrink-0 items-center gap-3">
+        <a href="/#inicio" className="flex shrink-0 items-center gap-3">
           <img
             src="/autosmix-logo.png"
             alt="AutosMix"
@@ -72,6 +82,7 @@ export function Header() {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={goSearch}
             placeholder="Buscar productos..."
             className="h-10 w-44 rounded-full border border-line bg-panel px-4 pl-9 text-sm text-white placeholder:text-white/35 outline-none transition-all duration-300 focus:w-64 focus:border-brand/60 focus:bg-panel-2 focus:shadow-[0_0_0_3px_rgba(225,6,0,0.15)] lg:w-56 lg:focus:w-72"
           />
@@ -126,6 +137,7 @@ export function Header() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={goSearch}
               placeholder="Buscar productos..."
               className="h-10 w-full rounded-full border border-line bg-panel px-4 pl-10 text-sm text-white placeholder:text-white/35 outline-none focus:border-brand/60"
             />

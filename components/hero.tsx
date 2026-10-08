@@ -9,7 +9,7 @@ const BENEFITS = [
   { icon: Zap, title: 'Iluminación LED', text: '12 y 24V · Kits Cree LED' },
   { icon: Truck, title: 'Envíos por Andreani', text: 'A todo el país' },
   { icon: ShieldCheck, title: 'Garantía real', text: 'Productos con respaldo oficial' },
-  { icon: Wrench, title: 'Asesoramiento', text: 'Te ayudamos a elegir lo justo' },
+  { icon: Wrench, title: 'Asesoramiento', text: 'Te ayudamos a elegir lo que mejor se adapte' },
 ]
 
 export function Hero() {
@@ -102,7 +102,7 @@ export function Hero() {
             href="#marcas"
             className="rounded-xl border border-white/15 bg-white/5 px-7 py-3.5 font-display text-sm tracking-wide text-white uppercase backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/60 hover:bg-brand/10"
           >
-            Nuestras marcas
+            Ver marcas
           </a>
         </div>
 

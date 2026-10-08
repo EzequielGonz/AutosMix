@@ -5,7 +5,7 @@ import { ArrowLeft, Zap } from 'lucide-react'
 import { formatPrice, STORE, transferPrice } from '@/lib/products'
 import type { CartItem } from '@/components/store-context'
 import { shippingCost, shippingLine, type ShippingChoice } from '@/components/shipping-quote'
-import { buildOrderMessage, EMPTY_CUSTOMER, validateCustomer, type Customer } from '@/lib/order-message'
+import { buildOrderMessage, EMPTY_CUSTOMER, PROVINCIAS, validateCustomer, type Customer } from '@/lib/order-message'
 
 const STORAGE_KEY = 'autosmix-customer'
 
@@ -42,19 +42,23 @@ export function CheckoutForm({
     }
   }, [])
 
-  const needsAddress = shipping.kind === 'domicilio'
-  const sendsAndreani = shipping.kind === 'domicilio' || shipping.kind === 'sucursal'
+  // "A coordinar" también es un envío por Andreani: se piden los mismos datos.
+  const needsAddress = shipping.kind === 'domicilio' || shipping.kind === 'coordinar'
+  const sendsAndreani = shipping.kind !== 'retiro'
   const cost = shippingCost(shipping)
   const askBranch = shipping.kind === 'sucursal' && !shipping.branch
+  // El CP cotizado en el carrito manda: si cambia, cambia el precio del envío.
+  const quotedCp = shipping.kind === 'domicilio' ? shipping.cp : ''
+  const customer = quotedCp ? { ...c, cp: quotedCp } : c
 
-  const set = (k: keyof Customer) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setC({ ...c, [k]: e.target.value })
+  const set = (k: keyof Customer) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setC({ ...c, [k]: k === 'cp' ? e.target.value.replace(/\D/g, '').slice(0, 4) : e.target.value })
     setError('')
   }
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
-    const err = validateCustomer(c, { needsAddress, needsId: sendsAndreani })
+    const err = validateCustomer(customer, { needsAddress, needsId: sendsAndreani })
     if (err) {
       setError(err)
       return
@@ -65,7 +69,7 @@ export function CheckoutForm({
     }
     setError('')
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(c))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(customer))
     } catch {
       /* sin storage */
     }
@@ -76,8 +80,7 @@ export function CheckoutForm({
       shippingText: shippingLine(shipping),
       needsAddress,
       branch: shipping.kind === 'sucursal' ? shipping.branch || branchPref.trim() : undefined,
-      cp: sendsAndreani ? shipping.cp : undefined,
-      customer: c,
+      customer,
     })
     window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener')
   }
@@ -102,10 +105,16 @@ export function CheckoutForm({
           : 'Dejanos tus datos para coordinar la entrega.'}
       </p>
 
-      <label className="block text-xs text-white/60">
-        Nombre y apellido *
-        <input value={c.nombre} onChange={set('nombre')} autoComplete="name" className={field} />
-      </label>
+      <div className="grid grid-cols-2 gap-2">
+        <label className="block text-xs text-white/60">
+          Nombre *
+          <input value={c.nombre} onChange={set('nombre')} autoComplete="given-name" className={field} />
+        </label>
+        <label className="block text-xs text-white/60">
+          Apellido *
+          <input value={c.apellido} onChange={set('apellido')} autoComplete="family-name" className={field} />
+        </label>
+      </div>
       <div className="grid grid-cols-2 gap-2">
         <label className="block text-xs text-white/60">
           Teléfono (con área) *
@@ -117,12 +126,13 @@ export function CheckoutForm({
         </label>
       </div>
       <label className="block text-xs text-white/60">
-        Email (te llegan los avisos de Andreani)
+        Email {sendsAndreani && '*'} <span className="text-white/35">(te llegan los avisos de Andreani)</span>
         <input value={c.email} onChange={set('email')} type="email" autoComplete="email" className={field} />
       </label>
 
       {needsAddress && (
         <>
+          <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-white/40">Dirección de entrega</p>
           <div className="grid grid-cols-[1fr_6rem] gap-2">
             <label className="block text-xs text-white/60">
               Calle *
@@ -130,23 +140,57 @@ export function CheckoutForm({
             </label>
             <label className="block text-xs text-white/60">
               Número *
-              <input value={c.numero} onChange={set('numero')} className={field} />
+              <input value={c.numero} onChange={set('numero')} inputMode="numeric" className={field} />
             </label>
           </div>
-          <label className="block text-xs text-white/60">
-            Piso / depto / referencias
-            <input value={c.piso} onChange={set('piso')} autoComplete="address-line2" className={field} />
-          </label>
           <div className="grid grid-cols-2 gap-2">
             <label className="block text-xs text-white/60">
-              Localidad *
+              Piso
+              <input value={c.piso} onChange={set('piso')} className={field} />
+            </label>
+            <label className="block text-xs text-white/60">
+              Depto
+              <input value={c.depto} onChange={set('depto')} className={field} />
+            </label>
+          </div>
+          <div className="grid grid-cols-[1fr_7rem] gap-2">
+            <label className="block text-xs text-white/60">
+              Ciudad / localidad *
               <input value={c.localidad} onChange={set('localidad')} autoComplete="address-level2" className={field} />
             </label>
             <label className="block text-xs text-white/60">
-              Provincia *
-              <input value={c.provincia} onChange={set('provincia')} autoComplete="address-level1" className={field} />
+              Código postal *
+              <input
+                value={customer.cp}
+                onChange={set('cp')}
+                readOnly={!!quotedCp}
+                inputMode="numeric"
+                autoComplete="postal-code"
+                title={quotedCp ? 'Es el CP con el que cotizaste el envío. Para cambiarlo, volvé al carrito.' : undefined}
+                className={`${field} ${quotedCp ? 'opacity-60' : ''}`}
+              />
             </label>
           </div>
+          <label className="block text-xs text-white/60">
+            Provincia *
+            <select value={c.provincia} onChange={set('provincia')} autoComplete="address-level1" className={field}>
+              <option value="">Elegí la provincia</option>
+              {PROVINCIAS.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block text-xs text-white/60">
+            Entre calles / referencias
+            <input
+              value={c.referencias}
+              onChange={set('referencias')}
+              placeholder="Ej: entre Colón y Alem, portón negro"
+              className={field}
+            />
+          </label>
         </>
       )}
 
