@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Check, ShoppingCart, Star } from 'lucide-react'
-import { formatPrice, type Product } from '@/lib/products'
+import { formatPrice, productPath, type Product } from '@/lib/products'
 import { useStore } from '@/components/store-context'
 import { cn } from '@/lib/utils'
 
@@ -29,6 +29,14 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : 0
 
+  // Link real (sirve para abrir en otra pestaña y para Google); el clic
+  // normal abre el popup sin salir de la tienda.
+  const onOpen = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    openProduct(product)
+  }
+
   const handleAdd = () => {
     add(product)
     setAdded(true)
@@ -40,9 +48,9 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
       style={{ animation: `fade-up 0.7s cubic-bezier(0.16,1,0.3,1) ${Math.min(index, 12) * 60}ms both` }}
     >
       {/* Imagen (clic abre el popup de detalle) */}
-      <button
-        type="button"
-        onClick={() => openProduct(product)}
+      <a
+        href={productPath(product)}
+        onClick={onOpen}
         aria-label={`Ver detalle de ${product.name}`}
         className="relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-[#0a0a0a]"
       >
@@ -87,18 +95,17 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
 
         {/* Overlay al hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      </button>
+      </a>
 
       {/* Info */}
       <div className="flex flex-1 flex-col gap-1.5 p-4">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
           {product.brand}
         </p>
-        <h3
-          onClick={() => openProduct(product)}
-          className="line-clamp-2 min-h-10 cursor-pointer text-sm font-semibold leading-snug text-white/90 transition-colors hover:text-brand"
-        >
-          {product.name}
+        <h3 className="line-clamp-2 min-h-10 text-sm font-semibold leading-snug text-white/90">
+          <a href={productPath(product)} onClick={onOpen} className="transition-colors hover:text-brand">
+            {product.name}
+          </a>
         </h3>
 
         {/* Rating */}

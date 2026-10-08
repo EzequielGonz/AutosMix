@@ -53,11 +53,11 @@ export function Brands() {
             <Reveal>
               <p className="text-xs font-bold uppercase tracking-[0.35em] text-brand">¿Quiénes somos?</p>
               <h2 className="mt-2 font-display text-3xl uppercase leading-tight sm:text-4xl">
-                Un local de barrio con <span className="text-brand">nivel nacional</span>
+                Un local con <span className="text-brand">alcance nacional</span>
               </h2>
               <p className="mt-4 leading-relaxed text-white/55">
-                En <strong className="text-white">AutosMix</strong> nos especializamos en iluminación
-                vehicular y accesorios.                Elegimos cada producto probándolo en el taller, porque
+                Desde el 2019, en <strong className="text-white">AutosMix</strong> nos especializamos en
+                iluminación vehicular y accesorios. Elegimos cada producto probándolo en el taller, porque
                 también somos usuarios. Despachamos a todo el país todos los días y también
                 podés encontrarnos en MercadoLibre.
               </p>

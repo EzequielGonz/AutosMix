@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Archivo_Black, Inter } from 'next/font/google'
 import './globals.css'
+import { SITE_URL } from '@/lib/products'
 
 const archivoBlack = Archivo_Black({
   weight: '400',
@@ -16,6 +17,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'AutosMix · Iluminación LED y Accesorios para Vehículos | Mar del Plata',
   description:
     'AutosMix — Especialistas en iluminación LED 12/24V, accesorios, alarmas, cierres centralizados y estética vehicular. Bordabehere 3111, Mar del Plata. Envíos a todo el país.',

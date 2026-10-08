@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { PRODUCTS, type Category, type Product, type Subcategory } from '@/lib/products'
+import { PRODUCTS, productPath, type Category, type Product, type Subcategory } from '@/lib/products'
 
 export type CartItem = { product: Product; qty: number }
 
@@ -115,6 +115,41 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const clear = useCallback(() => setItems([]), [])
 
+  // Búsqueda o categoría que llegan por la URL (?q= / ?cat=) desde otra página.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const q = params.get('q')
+    const cat = params.get('cat')
+    if (q) setSearch(q)
+    if (cat && ['iluminacion', 'accesorios', 'seguridad', 'estetica'].includes(cat)) setCategory(cat as Category)
+  }, [])
+
+  // Popup de producto con URL propia: al abrirlo la barra pasa a
+  // /producto/[id] (se puede copiar y compartir) y "atrás" lo cierra.
+  const openProduct = useCallback((p: Product) => {
+    setModalProduct(p)
+    const path = productPath(p)
+    if (window.location.pathname !== path) {
+      const state = { ...(window.history.state || {}), amModal: p.id }
+      if (window.history.state?.amModal) window.history.replaceState(state, '', path)
+      else window.history.pushState(state, '', path)
+    }
+  }, [])
+
+  const closeModal = useCallback(() => {
+    if (window.history.state?.amModal) window.history.back()
+    else setModalProduct(null)
+  }, [])
+
+  useEffect(() => {
+    const onPop = () => {
+      const id = window.history.state?.amModal
+      setModalProduct(id ? PRODUCTS.find((p) => p.id === id) || null : null)
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
   const { count, total } = useMemo(
     () => ({
       count: items.reduce((acc, i) => acc + i.qty, 0),
@@ -143,10 +178,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       subcategory,
       setSubcategory,
       modalProduct,
-      openProduct: (p: Product) => setModalProduct(p),
-      closeModal: () => setModalProduct(null),
+      openProduct,
+      closeModal,
     }),
-    [items, count, total, isCartOpen, add, remove, setQty, clear, lastAdded, search, category, subcategory, modalProduct],
+    [items, count, total, isCartOpen, add, remove, setQty, clear, lastAdded, search, category, subcategory, modalProduct, openProduct, closeModal],
   )
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

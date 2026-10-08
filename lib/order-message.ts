@@ -6,29 +6,66 @@ import { formatPrice, transferPrice } from '@/lib/products'
  * avisar el despacho, así que armado y lectura viven juntos acá.
  */
 
+/** Datos que pide Andreani para generar un envío. */
 export type Customer = {
   nombre: string
+  apellido: string
   dni: string
   telefono: string
   email: string
   calle: string
   numero: string
   piso: string
+  depto: string
+  cp: string
   localidad: string
   provincia: string
+  /** Entre calles / referencias para el repartidor. */
+  referencias: string
 }
 
 export const EMPTY_CUSTOMER: Customer = {
   nombre: '',
+  apellido: '',
   dni: '',
   telefono: '',
   email: '',
   calle: '',
   numero: '',
   piso: '',
+  depto: '',
+  cp: '',
   localidad: '',
   provincia: '',
+  referencias: '',
 }
+
+export const PROVINCIAS = [
+  'Buenos Aires',
+  'CABA',
+  'Catamarca',
+  'Chaco',
+  'Chubut',
+  'Córdoba',
+  'Corrientes',
+  'Entre Ríos',
+  'Formosa',
+  'Jujuy',
+  'La Pampa',
+  'La Rioja',
+  'Mendoza',
+  'Misiones',
+  'Neuquén',
+  'Río Negro',
+  'Salta',
+  'San Juan',
+  'San Luis',
+  'Santa Cruz',
+  'Santa Fe',
+  'Santiago del Estero',
+  'Tierra del Fuego',
+  'Tucumán',
+]
 
 export type OrderLine = { qty: number; name: string; subtotal: number }
 
@@ -41,7 +78,6 @@ export type OrderMessageInput = {
   needsAddress: boolean
   /** Sucursal Andreani elegida (envío a sucursal). */
   branch?: string
-  cp?: string
   customer: Customer
 }
 
@@ -60,15 +96,20 @@ export function buildOrderMessage(o: OrderMessageInput): string {
     `Total por transferencia (10% OFF en productos): ${formatPrice(transfer)}`,
     '',
     'Mis datos:',
-    `Nombre: ${c.nombre.trim()}`,
+    `Nombre: ${[c.nombre.trim(), c.apellido.trim()].filter(Boolean).join(' ')}`,
   ]
   if (c.dni.trim()) out.push(`DNI: ${c.dni.trim()}`)
   out.push(`Teléfono: ${c.telefono.trim()}`)
   if (c.email.trim()) out.push(`Email: ${c.email.trim()}`)
   if (o.needsAddress) {
     const calle = [c.calle.trim(), c.numero.trim()].filter(Boolean).join(' ')
-    const piso = c.piso.trim() ? `, ${c.piso.trim()}` : ''
-    out.push(`Dirección: ${calle}${piso}, ${c.localidad.trim()}, ${c.provincia.trim()} (CP ${o.cp || ''})`)
+    const unidad = [c.piso.trim() && `piso ${c.piso.trim()}`, c.depto.trim() && `depto ${c.depto.trim()}`]
+      .filter(Boolean)
+      .join(' ')
+    out.push(`Dirección: ${calle}${unidad ? `, ${unidad}` : ''}`)
+    out.push(`Ciudad: ${c.localidad.trim()}, ${c.provincia.trim()}`)
+    out.push(`Código postal: ${c.cp.trim()}`)
+    if (c.referencias.trim()) out.push(`Entre calles / referencias: ${c.referencias.trim()}`)
   }
   if (o.branch) out.push(`Sucursal Andreani: ${o.branch}`)
   return out.join('\n')
@@ -76,14 +117,17 @@ export function buildOrderMessage(o: OrderMessageInput): string {
 
 /** Valida los datos según el tipo de entrega. Devuelve el primer error o null. */
 export function validateCustomer(c: Customer, opts: { needsAddress: boolean; needsId: boolean }): string | null {
-  if (c.nombre.trim().length < 3) return 'Completá tu nombre y apellido'
+  if (c.nombre.trim().length < 2) return 'Completá tu nombre'
+  if (c.apellido.trim().length < 2) return 'Completá tu apellido'
   if (c.telefono.replace(/\D/g, '').length < 8) return 'Completá un teléfono válido (con código de área)'
   if (opts.needsId && !/^\d{7,8}$/.test(c.dni.replace(/\D/g, ''))) return 'Completá tu DNI (7 u 8 números)'
+  if (opts.needsId && !c.email.trim()) return 'Completá tu email (ahí te llegan los avisos de Andreani)'
   if (c.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email.trim())) return 'El email no es válido'
   if (opts.needsAddress) {
     if (!c.calle.trim() || !c.numero.trim()) return 'Completá la calle y el número'
-    if (!c.localidad.trim()) return 'Completá la localidad'
-    if (!c.provincia.trim()) return 'Completá la provincia'
+    if (!/^\d{4}$/.test(c.cp.trim())) return 'Completá el código postal (4 números)'
+    if (!c.localidad.trim()) return 'Completá la ciudad o localidad'
+    if (!c.provincia.trim()) return 'Elegí la provincia'
   }
   return null
 }

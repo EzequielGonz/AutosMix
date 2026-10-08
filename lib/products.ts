@@ -74,5 +74,18 @@ export const STORE = {
   mercadolibre: 'https://www.mercadolibre.com.ar/pagina/autosmix',
 }
 
+export const CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
+  CATEGORIES.filter((c) => c.id !== 'todos').map((c) => [c.id, c.label]),
+)
+
+/** URL propia de cada producto. */
+export const productPath = (p: Pick<Product, 'id'>) => `/producto/${encodeURIComponent(p.id)}`
+
+/** Dominio público de la tienda (para links absolutos, SEO y Open Graph). */
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000')
+).replace(/\/$/, '')
+
 export const formatPrice = (v: number) =>
   '$' + v.toLocaleString('es-AR', { maximumFractionDigits: 0 })
