@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Zap } from 'lucide-react'
+import { ArrowLeft, CreditCard, Loader2, Zap } from 'lucide-react'
 import { formatPrice, STORE, transferPrice } from '@/lib/products'
 import type { CartItem } from '@/components/store-context'
 import { shippingCost, shippingLine, type ShippingChoice } from '@/components/shipping-quote'
 import { buildOrderMessage, EMPTY_CUSTOMER, PROVINCIAS, validateCustomer, type Customer } from '@/lib/order-message'
 
 const STORAGE_KEY = 'autosmix-customer'
+/** Último pedido pagado con Mercado Pago, para mandarlo por WhatsApp al volver. */
+export const LAST_ORDER_KEY = 'autosmix-last-order'
 
 const field =
   'mt-1 h-10 w-full rounded-lg border border-line bg-ink px-3 text-sm text-white outline-none placeholder:text-white/25 focus:border-brand'
@@ -31,6 +33,8 @@ export function CheckoutForm({
   const [error, setError] = useState('')
   // Si Andreani no devolvió sucursales para el CP, el cliente escribe la que prefiere.
   const [branchPref, setBranchPref] = useState('')
+  const [mpEnabled, setMpEnabled] = useState(false)
+  const [paying, setPaying] = useState(false)
 
   // Recordar los datos para la próxima compra.
   useEffect(() => {
@@ -40,6 +44,13 @@ export function CheckoutForm({
     } catch {
       /* sin storage */
     }
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/mercadopago/checkout')
+      .then((r) => r.json())
+      .then((d) => setMpEnabled(!!d.enabled))
+      .catch(() => setMpEnabled(false))
   }, [])
 
   // "A coordinar" también es un envío por Andreani: se piden los mismos datos.
@@ -56,16 +67,16 @@ export function CheckoutForm({
     setError('')
   }
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault()
+  /** Valida, recuerda los datos y arma el mensaje de pedido. Null si hay un error. */
+  const prepare = () => {
     const err = validateCustomer(customer, { needsAddress, needsId: sendsAndreani })
     if (err) {
       setError(err)
-      return
+      return null
     }
     if (askBranch && branchPref.trim().length < 3) {
       setError('Indicá en qué sucursal Andreani querés retirar')
-      return
+      return null
     }
     setError('')
     try {
@@ -73,7 +84,7 @@ export function CheckoutForm({
     } catch {
       /* sin storage */
     }
-    const text = buildOrderMessage({
+    return buildOrderMessage({
       lines: items.map((i) => ({ qty: i.qty, name: i.product.name, subtotal: i.qty * i.product.price })),
       subtotal: total,
       shippingCost: cost,
@@ -82,7 +93,45 @@ export function CheckoutForm({
       branch: shipping.kind === 'sucursal' ? shipping.branch || branchPref.trim() : undefined,
       customer,
     })
+  }
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const text = prepare()
+    if (!text) return
     window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener')
+  }
+
+  const payWithMercadoPago = async () => {
+    const text = prepare()
+    if (!text) return
+    setPaying(true)
+    try {
+      const res = await fetch('/api/mercadopago/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map((i) => ({ id: i.product.id, qty: i.qty })),
+          shipping: { kind: shipping.kind, cp: shipping.kind === 'domicilio' || shipping.kind === 'sucursal' ? shipping.cp : '' },
+          customer,
+        }),
+      })
+      const d = (await res.json().catch(() => ({}))) as { url?: string; ref?: string; error?: string }
+      if (!res.ok || !d.url) {
+        setError(d.error || 'No pudimos iniciar el pago. Probá de nuevo.')
+        setPaying(false)
+        return
+      }
+      try {
+        localStorage.setItem(LAST_ORDER_KEY, JSON.stringify({ ref: d.ref, text }))
+      } catch {
+        /* sin storage */
+      }
+      window.location.href = d.url
+    } catch {
+      setError('No pudimos conectar con Mercado Pago. Probá de nuevo.')
+      setPaying(false)
+    }
   }
 
   return (
@@ -208,12 +257,23 @@ export function CheckoutForm({
 
       {error && <p className="text-xs text-brand">{error}</p>}
 
+      {mpEnabled && (
+        <button
+          type="button"
+          onClick={payWithMercadoPago}
+          disabled={paying}
+          className="mt-1 flex h-12 items-center justify-center gap-2 rounded-xl bg-[#009ee3] text-sm font-bold uppercase tracking-wide text-white transition hover:bg-[#0087c4] active:scale-[0.98] disabled:opacity-60"
+        >
+          {paying ? <Loader2 className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
+          Pagar con Mercado Pago
+        </button>
+      )}
       <button
         type="submit"
         className="mt-1 flex h-12 items-center justify-center gap-2 rounded-xl bg-brand text-sm font-bold uppercase tracking-wide text-white shadow-[0_8px_25px_rgba(225,6,0,0.4)] transition hover:bg-brand-600 active:scale-[0.98]"
       >
         <Zap className="size-4" />
-        Enviar pedido por WhatsApp
+        {mpEnabled ? 'Pedir por WhatsApp (pago a coordinar)' : 'Enviar pedido por WhatsApp'}
       </button>
       <p className="text-center text-[11px] text-white/35">
         Te respondemos para confirmar stock y pasarte los datos de pago.
